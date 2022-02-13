@@ -7,10 +7,10 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Your Name / Site Title"
+title                    : "physics-code-data–ml"
 title_separator          : "-"
 name                     : &name "Anshul Kapoor"
-description              : &description "Data-Algos-ML"
+description              : &description "physics-code-data–ml"
 url                      : https://a-kapoor.github.io
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "https://a-kapoor/a-kapoor.github.io"

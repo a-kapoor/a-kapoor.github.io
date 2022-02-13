@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Finding peace in physics-code-data--ml"
+title: "About me"
 excerpt: "About me"
 author_profile: true
 redirect_from: 
