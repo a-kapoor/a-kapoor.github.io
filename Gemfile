@@ -25,3 +25,9 @@ group :jekyll_plugins do
   gem 'jekyll-sitemap'
   gem 'hawkins'
 end
+
+
+source 'https://rubygems.org'
+gem 'nokogiri'
+gem 'rack', '~>1.1'
+gem 'rspec', :require => 'spec'
