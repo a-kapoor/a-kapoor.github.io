@@ -1,1 +1,132 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-14T16:18:28-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">physics-code-data–ml</title><subtitle>physics-code-data–ml</subtitle><author><name>Anshul Kapoor</name><email>akapoor@cern.ch</email></author></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-14T16:29:17-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">physics-code-data–ml</title><subtitle>physics-code-data–ml</subtitle><author><name>Anshul Kapoor</name><email>akapoor@cern.ch</email></author><entry><title type="html">Blog</title><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" title="Blog" /><published>2022-02-14T00:00:00-08:00</published><updated>2022-02-14T00:00:00-08:00</updated><id>http://localhost:4000/blog</id><content type="html" xml:base="http://localhost:4000/blog/">&lt;h1 id=&quot;basic-nanoaod-analysis-script&quot;&gt;Basic NanoAOD analysis script&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python=&quot;&gt;#!/usr/bin/env python
+
+files='/eos/cms/store/group/phys_egamma/akapoor/ChargeMisID/newsamples/*.root'
+
+import ROOT
+import os
+ROOT.gStyle.SetPalette(ROOT.kOcean);
+ROOT.ROOT.EnableImplicitMT()
+
+def selection_2el2mu(df):
+    df = df.Filter(&quot;nElectron==2&quot;, &quot;Exactly two electrons&quot;)
+    df = df.Define(&quot;GoodElectrons&quot;, &quot;(Electron_pt &amp;gt; 10) &amp;amp;&amp;amp; (Electron_mvaTTH &amp;gt; 0.8) &amp;amp;&amp;amp; (Electron_cutBased &amp;gt; 2)&quot;)
+    df = df.Filter(&quot;Sum(GoodElectrons) == 2&quot;,&quot;Exactly two good electrons&quot;)
+    df = df.Define(&quot;Dielectron_mass&quot;, 
+                   &quot;InvariantMass(Electron_pt[GoodElectrons], Electron_eta[GoodElectrons], Electron_phi[GoodElectrons], Electron_mass[GoodElectrons])&quot;)
+    df = df.Filter(&quot;(Dielectron_mass&amp;lt;111) &amp;amp;&amp;amp; (Dielectron_mass&amp;gt;71)&quot;,&quot;Z mass cut&quot;)
+    
+    return df
+
+df = ROOT.RDataFrame(&quot;Events&quot;, files)
+dfsel=selection_2el2mu(df)
+report = dfsel.Report()
+report.Print()
+
+h1 = dfsel.Filter(&quot;Sum(Electron_charge)==0&quot;, &quot;Two OS&quot;).Histo1D((&quot;Dielectron_mass&quot;, &quot;Dielectron_mass;m_{ee} (GeV);Events&quot;, 300, 71, 111), &quot;Dielectron_mass&quot;)
+h2 = dfsel.Histo1D((&quot;Dielectron_mass_all&quot;, &quot;Dielectron_mass;m_{ee} (GeV);Events&quot;, 300, 71, 111), &quot;Dielectron_mass&quot;)
+
+ROOT.gStyle.SetOptStat(0); ROOT.gStyle.SetTextFont(42)
+c = ROOT.TCanvas(&quot;c&quot;, &quot;&quot;, 800, 700)
+c.SetLogy()
+h1.SetTitle(&quot;&quot;)
+h1.GetXaxis().SetTitleSize(0.04)
+h1.GetYaxis().SetTitleSize(0.04)
+h1.Draw(&quot;&quot;)
+c.SaveAs(&quot;dielectron_spectrum.pdf&quot;)
+dfos=dfsel.Filter(&quot;Sum(Electron_charge)==0&quot;, &quot;Two OS&quot;)
+report = dfos.Report()
+report.Print()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Save it as maybe “ChargeFlip.py” and run&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash=&quot;&gt;python ChargeFlip.py
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>Anshul Kapoor</name><email>akapoor@cern.ch</email></author><summary type="html">Basic NanoAOD analysis script</summary></entry><entry><title type="html">Pythia8_to_hepmc_to_root</title><link href="http://localhost:4000/Pythia8_To_hepmc_To_ROOT/" rel="alternate" type="text/html" title="Pythia8_to_hepmc_to_root" /><published>2022-02-12T00:00:00-08:00</published><updated>2022-02-12T00:00:00-08:00</updated><id>http://localhost:4000/Pythia8_To_hepmc_To_ROOT</id><content type="html" xml:base="http://localhost:4000/Pythia8_To_hepmc_To_ROOT/">&lt;h1 id=&quot;pythia8---hepmc---root&quot;&gt;Pythia8 -&amp;gt; hepmc -&amp;gt; root&lt;/h1&gt;
+
+&lt;p&gt;The following instructions are for generating a sample physics process in pythia8 and converting the generated events into a root TTree.&lt;/p&gt;
+
+&lt;p&gt;We will need pythia8, hepmc2 and root. We can use conda to create a virtual environment&lt;/p&gt;
+
+&lt;p&gt;Follow these instructions:
+conda create –name pythia8withhepmc2
+conda activate pythia8withhepmc2
+conda install -c conda-forge hepmc2 pythia8 
+conda install -c conda-forge root&lt;/p&gt;
+
+&lt;p&gt;Within this enviroment, to generate a hepmc2 file, here is a pythia8 example (let us call in pythia8.C):&lt;/p&gt;
+
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;cp&quot;&gt;#include &quot;TSystem.h&quot;
+#include &quot;TH1F.h&quot;
+#include &quot;TClonesArray.h&quot;
+#include &quot;TPythia8.h&quot;
+#include &quot;Pythia8Plugins/HepMC2.h&quot;
+#include &quot;TParticle.h&quot;
+#include &quot;TDatabasePDG.h&quot;
+#include &quot;TCanvas.h&quot;
+&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;pythia8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Int_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nev&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ndeb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Load libraries&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gSystem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;libEG&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gSystem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;libEGPythia8&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Histograms&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Array of particles&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;TClonesArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;particles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TClonesArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TParticle&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Create pythia8 object&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;TPythia8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TPythia8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;HepMC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Pythia8ToHepMC&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toHepMC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;HepMC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IO_GenEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ascii_io&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file.hepmc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;//HepMC::WriterRootTree WriterRootfile(&quot;file.root&quot;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;HepMC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GenEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hepmcevt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#if PYTHIA_VERSION_INTEGER == 8235
+&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// Pythia 8.235 is known to cause crashes:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ABORTING PYTHIA8 TUTORIAL!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;The version of Pythia you use is known to case crashes due to memory errors.&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;They have been reported to the authors; the Pythia versions 8.1... are known to work.&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#endif
+&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// Configure&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ReadString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;HardQCD:all = on&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ReadString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Random:setSeed = on&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// use a reproducible seed: always the same results for the tutorial.&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ReadString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Random:seed = 42&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Initialize&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2212&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* p */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2212&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* p */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;14000.&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* TeV */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Event loop&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Int_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GenerateEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ndeb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EventListing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ImportParticles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;particles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;All&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Int_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;particles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GetEntriesFast&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+      
+    &lt;span class=&quot;n&quot;&gt;HepMC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GenEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hepmcevt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HepMC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GenEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;toHepMC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fill_next_event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Pythia8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hepmcevt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ascii_io&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hepmcevt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hepmcevt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;pythia&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PrintStatistics&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Run it using&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash=&quot;&gt;root -l pythia8.C
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will give you a hepmc2 file &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file.hepmc&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then clone my repo (originally from hbprosper) and set it up&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash=&quot;&gt;git clone git@github.com:akapoorcern/hepmc2root.git
+cd hepmc2root
+chmod +x setup.sh
+source setup.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then go to bin directory and run&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash=&quot;&gt;python hepmc2root.py &amp;lt;path to hepmc file&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will convert your pythia8 generated events to a root TTree.&lt;/p&gt;</content><author><name>Anshul Kapoor</name><email>akapoor@cern.ch</email></author><summary type="html">Pythia8 -&amp;gt; hepmc -&amp;gt; root</summary></entry></feed>
