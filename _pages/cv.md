@@ -8,8 +8,7 @@ redirect_from:
 ---
 
 {% include base_path %}
-
-Coming soon!
+This part is being updated.
 
 <!---
 Education
