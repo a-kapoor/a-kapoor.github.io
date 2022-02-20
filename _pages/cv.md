@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "CV"
+title:
 permalink: /cv/
 author_profile: true
 redirect_from:
@@ -8,15 +8,16 @@ redirect_from:
 ---
 
 {% include base_path %}
-This part is being updated.
 
-<!---
 Education
 ======
-* B.S. in GitHub, GitHub University, 2012
-* M.S. in Jekyll, GitHub University, 2014
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
 
+- **BSc (Hons) Physics**, University of Delhi, 2010--2013
+- **M.S. Physics**, IISER Pune, 2013--2015
+- **Ph.D. Experimental Particle Physics**, IISER Pune, 2015-2019\
+**THESIS TITLE** : Search for new physics in multilepton final states, Adviser : Prof. Sourabh Dube
+
+<!---
 Work experience
 ======
 * Summer 2015: Research Assistant
