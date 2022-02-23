@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://localhost:4000/portfolio/portfolio-1/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/portfolio/portfolio-2/</loc>
-</url>
-<url>
 <loc>http://localhost:4000/Pythia8_To_hepmc_To_ROOT/</loc>
 <lastmod>2022-02-12T00:00:00-08:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/blog/</loc>
+<loc>http://localhost:4000/BasicNanoAODAnalysis/</loc>
 <lastmod>2022-02-14T00:00:00-08:00</lastmod>
 </url>
 <url>

@@ -17,6 +17,12 @@ Education
 - **Ph.D. Experimental Particle Physics**, IISER Pune, 2015-2019\
 **THESIS TITLE** : Search for new physics in multilepton final states, Adviser : Prof. Sourabh Dube
 
+Professional Activity
+======
+
+- May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
+- Sep 2020 -- present, **Level-3 convener - identification of electrons and photons**, CMS Collaboration
+
 <!---
 Work experience
 ======

@@ -19,7 +19,7 @@
 
 
 
-<title>Portfolio item number 2 - physics-code-data–ml</title>
+<title>Basicnanoaodanalysis - physics-code-data–ml</title>
 
 
 
@@ -29,27 +29,30 @@
 
 <meta property="og:locale" content="en-US">
 <meta property="og:site_name" content="physics-code-data–ml">
-<meta property="og:title" content="Portfolio item number 2">
+<meta property="og:title" content="Basicnanoaodanalysis">
 
 
-  <link rel="canonical" href="http://localhost:4000/portfolio/portfolio-2/">
-  <meta property="og:url" content="http://localhost:4000/portfolio/portfolio-2/">
-
-
-
-  <meta property="og:description" content="Short description of portfolio item number 2 ">
+  <link rel="canonical" href="http://localhost:4000/BasicNanoAODAnalysis/">
+  <meta property="og:url" content="http://localhost:4000/BasicNanoAODAnalysis/">
 
 
 
+  <meta property="og:description" content="Basic NanoAOD analysis script">
 
+
+
+
+
+  
 
   
 
-  
 
 
 
 
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2022-02-14T00:00:00-08:00">
 
 
 
@@ -62,7 +65,7 @@
     {
       "@context" : "http://schema.org",
       "@type" : "Person",
-      "name" : "Anshul Kapoor",
+      "name" : "Personal webpage of Anshul Kapoor (CMS-CERN-IHEP-ParticlePhysics)",
       "url" : "http://localhost:4000",
       "sameAs" : null
     }
@@ -152,12 +155,6 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/talks/">Talks</a></li>
-          
-            
-            <li class="masthead__menu-item"><a href="http://localhost:4000/teaching/">Teaching</a></li>
-          
-            
-            <li class="masthead__menu-item"><a href="http://localhost:4000/portfolio/">Portfolio</a></li>
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/year-archive/">Blog Posts</a></li>
@@ -254,19 +251,29 @@
 
 
   <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Portfolio item number 2">
-    <meta itemprop="description" content="Short description of portfolio item number 2 ">
-    
+    <meta itemprop="headline" content="Basicnanoaodanalysis">
+    <meta itemprop="description" content="Basic NanoAOD analysis script">
+    <meta itemprop="datePublished" content="February 14, 2022">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 class="page__title" itemprop="headline">Portfolio item number 2
+          <h1 class="page__title" itemprop="headline">Basicnanoaodanalysis
 </h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
           
         
         
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-02-14T00:00:00-08:00">February 14, 2022</time></p>
         
         
              
@@ -276,7 +283,51 @@
       
 
       <section class="page__content" itemprop="text">
-        This is an item in your portfolio. It can be have images or nice text. If you name the file .md, it will be parsed as markdown. If you name the file .html, it will be parsed as HTML. 
+        <h1 id="basic-nanoaod-analysis-script">Basic NanoAOD analysis script</h1>
+
+<pre><code class="language-python=">#!/usr/bin/env python
+
+files='/eos/cms/store/group/phys_egamma/akapoor/ChargeMisID/newsamples/*.root'
+
+import ROOT
+import os
+ROOT.gStyle.SetPalette(ROOT.kOcean);
+ROOT.ROOT.EnableImplicitMT()
+
+def selection_2el2mu(df):
+    df = df.Filter("nElectron==2", "Exactly two electrons")
+    df = df.Define("GoodElectrons", "(Electron_pt &gt; 10) &amp;&amp; (Electron_mvaTTH &gt; 0.8) &amp;&amp; (Electron_cutBased &gt; 2)")
+    df = df.Filter("Sum(GoodElectrons) == 2","Exactly two good electrons")
+    df = df.Define("Dielectron_mass", 
+                   "InvariantMass(Electron_pt[GoodElectrons], Electron_eta[GoodElectrons], Electron_phi[GoodElectrons], Electron_mass[GoodElectrons])")
+    df = df.Filter("(Dielectron_mass&lt;111) &amp;&amp; (Dielectron_mass&gt;71)","Z mass cut")
+    
+    return df
+
+df = ROOT.RDataFrame("Events", files)
+dfsel=selection_2el2mu(df)
+report = dfsel.Report()
+report.Print()
+
+h1 = dfsel.Filter("Sum(Electron_charge)==0", "Two OS").Histo1D(("Dielectron_mass", "Dielectron_mass;m_{ee} (GeV);Events", 300, 71, 111), "Dielectron_mass")
+h2 = dfsel.Histo1D(("Dielectron_mass_all", "Dielectron_mass;m_{ee} (GeV);Events", 300, 71, 111), "Dielectron_mass")
+
+ROOT.gStyle.SetOptStat(0); ROOT.gStyle.SetTextFont(42)
+c = ROOT.TCanvas("c", "", 800, 700)
+c.SetLogy()
+h1.SetTitle("")
+h1.GetXaxis().SetTitleSize(0.04)
+h1.GetYaxis().SetTitleSize(0.04)
+h1.Draw("")
+c.SaveAs("dielectron_spectrum.pdf")
+dfos=dfsel.Filter("Sum(Electron_charge)==0", "Two OS")
+report = dfos.Report()
+report.Print()
+</code></pre>
+
+<p>Save it as maybe “ChargeFlip.py” and run</p>
+<pre><code class="language-bash=">python ChargeFlip.py
+</code></pre>
 
         
       </section>
@@ -297,11 +348,11 @@
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/portfolio/portfolio-2/" class="btn btn--twitter" title="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/BasicNanoAODAnalysis/" class="btn btn--twitter" title="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/portfolio/portfolio-2/" class="btn btn--facebook" title="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/BasicNanoAODAnalysis/" class="btn btn--facebook" title="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/portfolio/portfolio-2/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/BasicNanoAODAnalysis/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
       
@@ -309,7 +360,7 @@
 
   <nav class="pagination">
     
-      <a href="http://localhost:4000/portfolio/portfolio-1/" class="pagination--pager" title="Portfolio item number 1
+      <a href="http://localhost:4000/Pythia8_To_hepmc_To_ROOT/" class="pagination--pager" title="Pythia8_to_hepmc_to_root
 ">Previous</a>
     
     
@@ -323,6 +374,58 @@
   </article>
 
   
+  
+    <div class="page__related">
+      
+        <h4 class="page__related-title">You May Also Enjoy</h4>
+      
+      <div class="grid__wrapper">
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/Pythia8_To_hepmc_To_ROOT/" rel="permalink">Pythia8_to_hepmc_to_root
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-02-12T00:00:00-08:00">February 12, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><h1 id="pythia8---hepmc---root">Pythia8 -&gt; hepmc -&gt; root</h1>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+      </div>
+    </div>
   
 </div>
 
@@ -350,7 +453,7 @@
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2022 Anshul Kapoor. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/academicpages/academicpages.github.io">AcademicPages</a>, a fork of <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2022 Personal webpage of Anshul Kapoor (CMS-CERN-IHEP-ParticlePhysics). Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/academicpages/academicpages.github.io">AcademicPages</a>, a fork of <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>
