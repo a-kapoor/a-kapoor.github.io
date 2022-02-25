@@ -80,8 +80,8 @@ analytics:
 
 # Site Author
 author:
-  name             : "Anshul Kapoor"
-  avatar           : "profile.png"
+  name             : ""
+  avatar           : "7h0N.gif"
   bio              : "Finding peace in physics-code-data–ml"
   location         : 
   employer         :
@@ -181,7 +181,7 @@ collections:
   publications:
     output: true
     permalink: /:collection/:path/
-  portfolio:
+  photography:
     output: false
     permalink: /:collection/:path/
   talks:
@@ -227,10 +227,10 @@ defaults:
       author_profile: true
       share: true
       comments: true
-  # _portfolio
+  # _photography
   - scope:
       path: ""
-      type: portfolio
+      type: photography
     values:
       layout: single
       author_profile: true

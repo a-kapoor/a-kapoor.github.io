@@ -1,0 +1,86 @@
+---
+layout: archive
+title: "Photography"
+permalink: /photography/
+author_profile: true
+---
+
+<div id="gallery">
+
+  <div class="zoom"><img src="20210919201840_IMG_6194-01.jpeg"/></div>
+  <div class="zoom"><img src="20210919202237_IMG_6244-01.jpeg"/></div>
+  <div class="zoom"><img src="20210919203631_IMG_6418-01.jpeg"/></div>
+  <div class="zoom"><img src="20210919203729_IMG_6451-01.jpeg"/></div>
+  <div class="zoom"><img src="PXL_20210109_115630884.MP-02.jpeg"/></div>
+  <div class="zoom"><img src="PXL_20210910_121949853-01.jpeg"/></div>
+  <div class="zoom"><img src="PXL_20211107_161629969.NIGHT-01-01.jpeg"/></div>
+  <div class="zoom"><img src="PXL_20211127_133407548-01.jpeg"/></div>
+  <div class="zoom"><img src="PXL_20211128_123130251.MP-01.jpeg"/></div>
+  <div class="zoom"><img src="PXL_20211226_100732861.MP-01.jpeg"/></div>
+  <div class="zoom"><img src="PXL_20220218_152745378.MP-01.jpeg"/></div>
+  
+
+</div>
+
+<style>
+
+  #gallery {
+   line-height:0;
+   -webkit-column-count:5; /* split it into 5 columns */
+   -webkit-column-gap:5px; /* give it a 5px gap between columns */
+   -moz-column-count:5;
+   -moz-column-gap:5px;
+   column-count:5;
+   column-gap:5px;
+  }
+
+  #gallery img {
+   width: 100% !important;
+   height: auto !important;
+   margin-bottom:5px; /* to match column gap */
+  }
+  @media (max-width: 1200px) {
+   #gallery {
+    -moz-column-count:    4;
+    -webkit-column-count: 4;
+    column-count:         4;
+   }
+  }
+  @media (max-width: 1000px) {
+   #gallery {
+    -moz-column-count:    3;
+    -webkit-column-count: 3;
+    column-count:         3;
+   }
+  }
+  @media (max-width: 800px) {
+   #gallery {
+    -moz-column-count:    2;
+    -webkit-column-count: 2;
+    column-count:         2;
+   }
+  }
+
+  @media (max-width: 400px) {
+   #gallery {
+    -moz-column-count:    1;
+    -webkit-column-count: 1;
+    column-count:         1;
+   }
+  }
+
+  .zoom {
+  padding: 0px;
+  background-color: transparent;
+  transition: transform .2s; /* Animation */
+  margin: 0 auto;
+}
+
+  .zoom:hover {
+  transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+  
+  
+</style>
+
+
