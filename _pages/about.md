@@ -10,7 +10,7 @@ redirect_from:
 
 <img src="images/profile.png" width="150">
 
-I am an experimental particle physicist. Primarily, I work on the CMS experiment which is located along the LHC (Large Hadron Collider) at CERN. My work involves the study of all sorts of physics that happens when you smash high-energy protons at the Large Hadron Collider. When high-energy protons collide at the Large Hadron Collider, they create more particles. These particles have various quantifiable properties which are then converted into datasets, and these datasets can help us discover new physics about our universe.
+I am an experimental particle physicist. Primarily, I work on the CMS experiment which is located along the LHC (Large Hadron Collider) at CERN. My work involves the study of all sorts of physics that happens when you smash high-energy protons at the Large Hadron Collider. When high-energy protons collide at the Large Hadron Collider, they create more particles. These particles are then detected by the CMS detector. This helps us measure the various properties of these particles. All of this data is then analyzed to help us understand the fundamental workings of our universe.
 
 <br clear="left"/>
 
