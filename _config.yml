@@ -7,9 +7,9 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "physics-code-data–ml"
+title                    : "Anshul Kapoor ( CMS - CERN)"
 title_separator          : "-"
-name                     : &name "Personal webpage of Anshul Kapoor (CMS-CERN-IHEP-ParticlePhysics)"
+name                     : &name "Personal webpage of Anshul Kapoor (CERN)"
 description              : &description "physics-code-data–ml"
 url                      : https://a-kapoor.github.io
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
