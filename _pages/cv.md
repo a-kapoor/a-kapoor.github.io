@@ -23,6 +23,12 @@ Professional Activity
 - May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
 - Sep 2020 -- present, **Level-3 convener - identification of electrons and photons**, CMS Collaboration
 
+Facilitator work
+======
+
+- 2021 - **LPC HATS school (Electron and Photon exercise)**
+- 2022 - **Lead facilitator at the LPC CMS Data Analysis School**
+
 <!---
 Work experience
 ======
