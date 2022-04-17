@@ -13,20 +13,17 @@ redirect_from:
 Physicist, IHEP(Beijing) and CERN(Geneva), anshulhep@gmail.com
 
 ## Education
-======
-- **BSc (Hons) Physics**, University of Delhi, 2010--2013
+- ###### **BSc (Hons) Physics**, University of Delhi, 2010--2013
 - **M.S. Physics**, IISER Pune, 2013--2015
 - **Ph.D. Experimental Particle Physics**, IISER Pune, 2015-2019\
 **THESIS TITLE** : Search for new physics in multilepton final states, Adviser : Prof. Sourabh Dube
 
 ## Professional Activity
-======
 - May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
 - Sep 2020 -- present, **Level-3 convenor - identification of electrons and photons**, CMS Collaboration
 - Starting Sep 2022 , **Level-2 convenor of electron-photon working group**, CMS Collaboration
 
 ## Publications
-======
 <span style="color:blue">*2022*</span>
 **CP violation in ttH and tH in multilepton channels** (in preparation)
 <span style="color:blue">*2021*</span>
@@ -43,12 +40,10 @@ Physicist, IHEP(Beijing) and CERN(Geneva), anshulhep@gmail.com
 **Search for Type-III Seesaw Heavy Fermions with Multilepton Final States using 2.3/fb of 13 TeV proton-proton Collision Data**, The CMS Collaboration, CMS-PAS-EXO-16-002
 
 ## Facilitator work
-======
 - 2021 - **LPC HATS school (Electron and Photon exercise)**
 - 2022 - **Lead facilitator at the LPC CMS Data Analysis School**
 
 ## Inivited talks and posters
-======
   - November 2020, <b>Electron and photon performance in CMS in Run2 </b> (Talk)
     The 6th China LHC Physics Workshop
   - October 2018, <b>Building blocks of the Universe </b> (Talk)
