@@ -9,12 +9,8 @@ redirect_from:
 
 {% include base_path %}
 
-|   |   |
-|:-----:|:-:|:-:|
-| anshulhep@gmail.com |   |
-
-## Anshul Kapoor
-### anshulhep@gmail.com
+## <b>Anshul Kapoor</b>,
+Physicist, IHEP(Beijing) and CERN(Geneva), anshulhep@gmail.com
 
 Education
 ======
@@ -28,7 +24,8 @@ Professional Activity
 ======
 
 - May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
-- Sep 2020 -- present, **Level-3 convener - identification of electrons and photons**, CMS Collaboration
+- Sep 2020 -- present, **Level-3 convenor - identification of electrons and photons**, CMS Collaboration
+- Starting Sep 2022 , **Level-2 convenor of electron-photon working group**, CMS Collaboration
 
 Facilitator work
 ======
@@ -51,7 +48,7 @@ Inivited talks and posters
   - October 2017, <b>The scope of physics research (for school students) </b> (Talk)
     Koormanchal Academy (Almora)
 
-  - August 2017, <b>Search for evidence of Type-III seesaw mechanism in multilepton final states in proton-proton collisions at $\sqrt$s = 13 TeV </b> (Talk)
+  - August 2017, <b>Search for evidence of Type-III seesaw mechanism in multilepton final states in proton-proton collisions at 13 TeV </b> (Talk)
     DESY (Hamburg)
 
   - February 2017, <b>Reconstructing charged particles from proton-proton collisions </b> (Talk)
