@@ -44,7 +44,7 @@ redirect_from:
    - 2022 - **Lead facilitator at the LPC CMS Data Analysis School**
    - 2021 - **LPC HATS school (Electron and Photon exercise)**
 
-## Inivited talks and posters  |
+## Invited talks and posters  |
   - November 2020, <b>Electron and photon performance in CMS in Run2 </b> (Talk)
     The 6th China LHC Physics Workshop
   - October 2018, <b>Building blocks of the Universe </b> (Talk)
