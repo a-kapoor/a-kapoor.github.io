@@ -13,7 +13,7 @@ redirect_from:
 **Physicist**, IHEP(Beijing) and CERN(Geneva) |  **Email**: anshulhep@gmail.com
 
 ## Education |
-   - **Ph.D. Experimental Particle Physics**, IISER Pune, 2015-2019
+   - **Ph.D. Experimental Particle Physics**, IISER Pune, 2015-2019\
      **THESIS TITLE** : Search for new physics in multilepton final states, Adviser : Prof. Sourabh Dube
    - **M.S. Physics**, IISER Pune, 2013--2015
    - **BSc (Hons) Physics**, DDU College, University of Delhi, 2010--2013
