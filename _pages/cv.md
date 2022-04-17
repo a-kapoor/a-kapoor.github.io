@@ -9,6 +9,13 @@ redirect_from:
 
 {% include base_path %}
 
+|   |   |
+|:-----:|:-:|:-:|
+| anshulhep@gmail.com |   |
+
+## Anshul Kapoor
+### anshulhep@gmail.com
+
 Education
 ======
 
@@ -28,6 +35,31 @@ Facilitator work
 
 - 2021 - **LPC HATS school (Electron and Photon exercise)**
 - 2022 - **Lead facilitator at the LPC CMS Data Analysis School**
+
+Inivited talks and posters
+======
+
+  - November 2020, <b>Electron and photon performance in CMS in Run2 </b> (Talk)
+    The 6th China LHC Physics Workshop
+
+  - October 2018, <b>Building blocks of the Universe </b> (Talk)
+    University of Delhi (Delhi)
+
+  - August 2018, <b>Searches for new resonances in final states with leptons at CMS </b> (Talk)
+    25th Rencontres du Vietnam - Windows on the Universe, ICISE, Quy Nhon (Vietnam)
+
+  - October 2017, <b>The scope of physics research (for school students) </b> (Talk)
+    Koormanchal Academy (Almora)
+
+  - August 2017, <b>Search for evidence of Type-III seesaw mechanism in multilepton final states in proton-proton collisions at $\sqrt$s = 13 TeV </b> (Talk)
+    DESY (Hamburg)
+
+  - February 2017, <b>Reconstructing charged particles from proton-proton collisions </b> (Talk)
+    Chai Pehele Charcha, IISER Pune
+
+  - December 2016, <b>Recent developments in Fast Simulation at CMS </b> (Poster)
+    XXII DAE-BRNS High Energy Physics Symposium, University of Delhi
+
 
 <!---
 Work experience
