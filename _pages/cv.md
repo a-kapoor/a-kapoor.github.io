@@ -9,7 +9,7 @@ redirect_from:
 
 {% include base_path %}
 
-# <b>Anshul Kapoor</b>,
+# <b>Anshul Kapoor</b>
 Physicist, IHEP(Beijing) and CERN(Geneva), anshulhep@gmail.com
 
 ## Education
