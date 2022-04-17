@@ -9,10 +9,10 @@ redirect_from:
 
 {% include base_path %}
 
-## <b>Anshul Kapoor</b>,
+# <b>Anshul Kapoor</b>,
 Physicist, IHEP(Beijing) and CERN(Geneva), anshulhep@gmail.com
 
-Education
+## Education
 ======
 
 - **BSc (Hons) Physics**, University of Delhi, 2010--2013
@@ -20,20 +20,20 @@ Education
 - **Ph.D. Experimental Particle Physics**, IISER Pune, 2015-2019\
 **THESIS TITLE** : Search for new physics in multilepton final states, Adviser : Prof. Sourabh Dube
 
-Professional Activity
+## Professional Activity
 ======
 
 - May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
 - Sep 2020 -- present, **Level-3 convenor - identification of electrons and photons**, CMS Collaboration
 - Starting Sep 2022 , **Level-2 convenor of electron-photon working group**, CMS Collaboration
 
-Facilitator work
+## Facilitator work
 ======
 
 - 2021 - **LPC HATS school (Electron and Photon exercise)**
 - 2022 - **Lead facilitator at the LPC CMS Data Analysis School**
 
-Inivited talks and posters
+## Inivited talks and posters
 ======
 
   - November 2020, <b>Electron and photon performance in CMS in Run2 </b> (Talk)
