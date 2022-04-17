@@ -10,18 +10,19 @@ redirect_from:
 {% include base_path %}
 
 # <b>Anshul Kapoor</b>
-**Physicist**, IHEP(Beijing) and CERN(Geneva), anshulhep@gmail.com
+**Physicist**, IHEP(Beijing) and CERN(Geneva) |  **Email**: anshulhep@gmail.com
 
 ## Education |
-   - **BSc (Hons) Physics**, University of Delhi, 2010--2013
-   - **M.S. Physics**, IISER Pune, 2013--2015
-   - **Ph.D. Experimental Particle Physics**, IISER Pune, 2015-2019\
+   - **Ph.D. Experimental Particle Physics**, IISER Pune, 2015-2019
      **THESIS TITLE** : Search for new physics in multilepton final states, Adviser : Prof. Sourabh Dube
+   - **M.S. Physics**, IISER Pune, 2013--2015
+   - **BSc (Hons) Physics**, DDU College, University of Delhi, 2010--2013
+
 
 ## Professional Activity |
-   - May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
-   - Sep 2020 -- present, **Level-3 convenor - identification of electrons and photons**, CMS Collaboration
    - Starting Sep 2022 , **Level-2 convenor of electron-photon working group**, CMS Collaboration
+   - Sep 2020 -- present, **Level-3 convenor - identification of electrons and photons**, CMS Collaboration
+   - May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
 
 ## Publications |
    - <span style="color:blue">*2022*</span>
@@ -40,8 +41,8 @@ redirect_from:
    **Search for Type-III Seesaw Heavy Fermions with Multilepton Final States using 2.3/fb of 13 TeV proton-proton Collision Data**, The CMS Collaboration, CMS-PAS-EXO-16-002
 
 ## Facilitator |
-   - 2021 - **LPC HATS school (Electron and Photon exercise)**
    - 2022 - **Lead facilitator at the LPC CMS Data Analysis School**
+   - 2021 - **LPC HATS school (Electron and Photon exercise)**
 
 ## Inivited talks and posters  |
   - November 2020, <b>Electron and photon performance in CMS in Run2 </b> (Talk)
