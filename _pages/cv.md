@@ -20,13 +20,13 @@ redirect_from:
 
 
 ## Professional Activity |
-   - Starting Sep 2022 , **Level-2 convenor of electron-photon working group**, CMS Collaboration
+   - Sep 2022--ongoing , **Level-2 convenor of electron-photon working group**, CMS Collaboration
    - Sep 2020 -- present, **Level-3 convenor - identification of electrons and photons**, CMS Collaboration
    - May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
 
 ## Publications |
    - <span style="color:blue">*2022*</span>
-   **CP violation in ttH and tH in multilepton channels** (in preparation)
+   **CP violation in ttH and tH in multilepton channels** (accepted by JHEP)
    - <span style="color:blue">*2021*</span>
    **Electron and photon reconstruction and identification with the CMS experiment at the CERN LHC**, The CMS Collaboration, JINST 16,05 (2021) P05014
    - <span style="color:blue">*2019*</span>
