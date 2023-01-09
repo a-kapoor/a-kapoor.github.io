@@ -21,7 +21,7 @@ redirect_from:
 
 ## Professional Activity |
    - Sep 2022--ongoing , **Level-2 convenor of electron-photon working group**, CMS Collaboration
-   - Sep 2020 -- present, **Level-3 convenor - identification of electrons and photons**, CMS Collaboration
+   - Sep 2020 -- Sep 2022, **Level-3 convenor - identification of electrons and photons**, CMS Collaboration
    - May 2018 -- Aug 2020, **Electron-contact for exotic searches**, CMS Collaboration
 
 ## Publications |
