@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photography — Anshul Kapoor</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #gallery { line-height:0; column-count:5; column-gap:5px; }
+    #gallery img { width:100%!important; height:auto!important; margin-bottom:5px; }
+    @media (max-width:1200px) { #gallery { column-count:4; } }
+    @media (max-width:1000px) { #gallery { column-count:3; } }
+    @media (max-width:800px) { #gallery { column-count:2; } }
+    @media (max-width:400px) { #gallery { column-count:1; } }
+    .zoom { padding:0; background:transparent; transition:transform .2s; margin:0 auto; }
+    .zoom:hover { transform:scale(1.5); }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="site-name">Anshul Kapoor</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="cv.html">CV</a>
+      <a href="contact.html">Contact</a>
+      <a href="photography.html" class="active">Photography</a>
+    </div>
+  </nav>
+  <section>
+    <h2>Photography</h2>
+    <div id="gallery">
+      <div class="zoom"><img src="../photography/20210919201840_IMG_6194-01.jpeg"/></div>
+      <div class="zoom"><img src="../photography/20210919202237_IMG_6244-01.jpeg"/></div>
+      <div class="zoom"><img src="../photography/20210919203631_IMG_6418-01.jpeg"/></div>
+      <div class="zoom"><img src="../photography/20210919203729_IMG_6451-01.jpeg"/></div>
+      <div class="zoom"><img src="../photography/PXL_20210109_115630884.MP-02.jpeg"/></div>
+      <div class="zoom"><img src="../photography/PXL_20211107_161629969.NIGHT-01-01.jpeg"/></div>
+      <div class="zoom"><img src="../photography/PXL_20211127_133407548-01.jpeg"/></div>
+      <div class="zoom"><img src="../photography/PXL_20211128_123130251.MP-01.jpeg"/></div>
+      <div class="zoom"><img src="../photography/PXL_20211226_100732861.MP-01.jpeg"/></div>
+      <div class="zoom"><img src="../photography/PXL_20220218_152745378.MP-01.jpeg"/></div>
+    </div>
+  </section>
+  <footer>
+    &copy; 2026 Anshul Kapoor &middot;
+    <a href="https://github.com/a-kapoor">GitHub</a> &middot;
+    <a href="https://scholar.google.com/citations?hl=en&user=jyCBcigAAAAJ">Google Scholar</a>
+  </footer>
+</body>
+</html>
