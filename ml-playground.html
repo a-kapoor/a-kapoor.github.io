@@ -259,15 +259,99 @@
     }
     @keyframes popIn { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
     .tf-pipeline {
-      display:flex; gap:12px; align-items:flex-start; justify-content:center;
-      flex-wrap:wrap; margin-top:12px;
+      display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;
+      max-width:800px; margin-left:auto; margin-right:auto;
     }
     .tf-stage {
       background:#f7f9fb; border:1px solid var(--border); border-radius:10px;
-      padding:10px; text-align:center; min-width:140px; flex:1; max-width:260px;
+      padding:10px; text-align:center;
     }
     .tf-stage h4 { margin:0 0 6px; font-size:.82em; color:var(--primary); text-transform:uppercase; letter-spacing:.5px; }
     .tf-stage canvas { display:block; margin:0 auto; border-radius:4px; }
+
+    /* ── Transformer mini-course ── */
+    .tf-course { background:none; padding:0; }
+    .tf-course-title {
+      font-size:1.12em; font-weight:800; color:var(--primary);
+      text-align:center; margin-bottom:18px; letter-spacing:-.01em;
+    }
+    .tf-chapter {
+      display:flex; gap:14px; margin-bottom:12px;
+      padding:14px 16px; border-radius:12px;
+      background:#f7f9fb; border:1px solid rgba(52,152,219,.10);
+    }
+    .tf-ch-num {
+      width:28px; height:28px; flex-shrink:0; border-radius:50%;
+      background:var(--primary); color:#fff; font-weight:800; font-size:.85em;
+      display:flex; align-items:center; justify-content:center; margin-top:2px;
+    }
+    .tf-ch-body { flex:1; min-width:0; }
+    .tf-ch-title { font-weight:700; font-size:.93em; color:#1f3b53; margin-bottom:5px; }
+    .tf-chapter p { margin:0 0 7px; line-height:1.65; font-size:.87em; color:#34495e; }
+    .tf-chapter p:last-child { margin-bottom:0; }
+    .tf-chapter code { background:rgba(52,152,219,.08); padding:1px 5px; border-radius:3px; font-size:.92em; }
+    .tf-chapter ul.tf-qkv { margin:5px 0 8px 16px; padding:0; font-size:.87em; color:#34495e; line-height:1.6; }
+    .tf-chapter ul.tf-qkv li { margin-bottom:3px; }
+    .tf-callout {
+      background:rgba(243,156,18,.08); border-left:3px solid #f39c12;
+      padding:7px 12px; border-radius:0 6px 6px 0;
+      font-size:.83em; color:#7d6608; line-height:1.55; margin-top:7px;
+    }
+    .tf-eq {
+      background:rgba(52,152,219,.06); padding:7px 14px; border-radius:6px;
+      font-family:'Courier New',monospace; font-size:.83em; text-align:center;
+      color:#2c3e50; margin:7px 0; letter-spacing:.02em;
+    }
+    .tf-chapter-final {
+      background:linear-gradient(135deg,rgba(52,152,219,.08),rgba(46,204,113,.06));
+      border-color:rgba(46,204,113,.15);
+    }
+    .tf-chapter-final .tf-ch-num { background:#27ae60; }
+
+    /* ── Scaling Context (for all demos) ── */
+    .scaling-context { margin-top:14px; }
+    .demo-chapter-final {
+      display:flex; gap:14px;
+      padding:14px 16px; border-radius:12px;
+      background:linear-gradient(135deg,rgba(52,152,219,.08),rgba(46,204,113,.06));
+      border:1px solid rgba(46,204,113,.15);
+    }
+    .demo-ch-num {
+      width:28px; height:28px; flex-shrink:0; border-radius:50%;
+      background:#27ae60; color:#fff; font-weight:800; font-size:.85em;
+      display:flex; align-items:center; justify-content:center; margin-top:2px;
+    }
+    .demo-ch-body { flex:1; min-width:0; }
+    .demo-ch-title { font-weight:700; font-size:.93em; color:#1f3b53; margin-bottom:5px; }
+    .demo-chapter-final p { margin:0; line-height:1.65; font-size:.87em; color:#34495e; }
+
+    /* Collapsible Transformer Understanding Panel */
+    .tf-understand-panel {
+      background:#f0f8ff; border:1px solid rgba(52,152,219,.25); margin-top:18px;
+    }
+    .tf-understand-panel > summary {
+      padding:12px 14px; font-weight:700; color:var(--primary); cursor:pointer;
+      user-select:none;
+    }
+    .tf-understand-panel > summary:hover { background:rgba(52,152,219,.05); }
+    .tf-understand-panel .learn-body {
+      padding:14px 16px; font-size:.95em; line-height:1.5;
+    }
+    .tf-viz-guide {
+      display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0;
+    }
+    .tf-guide-item {
+      display:flex; gap:10px; background:#fff; padding:12px; border-radius:8px;
+      border-left:4px solid var(--primary);
+    }
+    .tf-guide-num {
+      font-weight:800; font-size:1.3em; color:var(--primary); flex-shrink:0;
+      width:32px; text-align:center; line-height:1.4;
+    }
+    .tf-guide-text {
+      flex:1; font-size:.95em; color:#333;
+    }
+    .tf-guide-text strong { color:var(--primary); }
 
     @media(max-width:900px){
       .tabs {
@@ -298,7 +382,9 @@
       .ctrl { justify-content: stretch; }
       .ctrl label { width: 100%; justify-content: space-between; }
       .ctrl button { flex: 1 1 140px; }
-      .tf-stage { min-width: 100%; max-width: none; }
+      .tf-stage { }
+      .tf-pipeline { grid-template-columns: 1fr; }
+      .tf-viz-guide { grid-template-columns: 1fr; }
       .side-stack { align-items: stretch; }
     }
   </style>
@@ -367,6 +453,15 @@
       (steepest downhill direction) at each step. A smaller learning rate takes
       cautious steps; a larger one leaps — and may overshoot!
     </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From Loss Surfaces to Neural Networks</div>
+          <p>This demo shows 2D optimization on a bowl. Real models have millions or billions of parameters — too many to visualize. But the core idea is identical: compute the gradient (direction of steepest ascent in error), step downhill, repeat. Every neural network training loop — from tiny MLPs to GPT-4 — is just this same algorithm applied to a vastly higher-dimensional space. The bigger the network and dataset, the more careful you must be with learning rates and batching.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ════════════════════════════════════════════  
@@ -394,6 +489,15 @@
       if a point is on the wrong side of the line (or within the margin),
       the line shifts toward it. The shaded regions show which class the model
       would predict for any new point. The dashed lines mark the SVM <i>margin</i>.
+    </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From 2D Classification to Billion-Dimensional Text</div>
+          <p>This SVM works in 2D, so we can see the decision boundary clearly. But text classification (spam detection, sentiment analysis) happens in 10,000+ dimensional embedding spaces — one per word in a learned vocabulary. The same principle applies: find a hyperplane that maximizes the margin between classes. Modern LLMs use much richer classifiers, but SVMs remain powerful for structured tabular data and as building blocks in larger systems.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -423,6 +527,15 @@
       (2) <b>Update</b> — move each centroid to the average of its points.
       Repeating converges to stable clusters. The coloured background shows the
       <i>Voronoi regions</i> — every pixel is painted by its nearest centroid.
+    </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From Toy Clusters to Customer Segmentation</div>
+          <p>K-Means here groups 100 dots by 3–5 categories. In the real world, companies segment millions of customers by behavior (purchase history, browsing patterns, geography) across hundreds of dimensions. K-Means still works, but you pay computational costs and must decide K blindly. Modern alternatives like DBSCAN and Gaussian Mixture Models handle density better, and deep learning embeddings replace hand-crafted features. The assign-then-update rhythm, though, is timeless.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -460,6 +573,15 @@
       between two vectors: 1 = identical direction, 0 = unrelated. This is the core
       idea behind word2vec, GloVe, and modern LLM embeddings.
     </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From 3-D Toys to 1,536-D Real Embeddings</div>
+          <p>This demo shows 3D embeddings for visualization. GPT-3 uses 12,288-dimensional embeddings; modern systems go even higher. You cannot visualize these spaces directly, but the mathematics remains identical: each word or concept is a point in high-dimensional space, and cosine similarity measures alignment. Embeddings are the secret sauce of modern NLP — they compress meaning into dense vectors that models can learn and compare at scale. Everything from semantic search to recommendation systems relies on this idea.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ════════════════════════════════════════════
@@ -467,7 +589,7 @@
        ════════════════════════════════════════════ -->
   <div class="card" id="c4" role="tabpanel" aria-labelledby="tab4" hidden>
     <h2>Tiny Transformer</h2>
-    <p class="sub">Build a sentence, then watch a mini transformer predict the next word step by step.</p>
+    <p class="sub">A real (tiny!) transformer with embeddings, positional encoding, Q/K/V attention, and a feed-forward network — no tricks, no cheat tables.</p>
 
     <p class="note-muted">Click words to build your prompt:</p>
     <div class="tf-input" id="tfWords"></div>
@@ -481,32 +603,142 @@
 
     <div class="tf-pipeline" id="tfPipe" style="display:none;">
       <div class="tf-stage">
-        <h4>1 · Embeddings</h4>
+        <h4>1 · Embed + Position</h4>
         <canvas id="tfEmb" width="220" height="160"></canvas>
-        <p class="microcopy">Each word → a vector of numbers</p>
+        <p class="microcopy">Word embedding + sinusoidal position</p>
       </div>
       <div class="tf-stage">
-        <h4>2 · Attention</h4>
+        <h4>2 · Q·K Attention</h4>
         <canvas id="tfAtt" width="220" height="160"></canvas>
-        <p class="microcopy">How much each word attends to every other</p>
+        <p class="microcopy">Causal self-attention (Q·K<sup>T</sup>/√d)</p>
       </div>
       <div class="tf-stage">
-        <h4>3 · Prediction</h4>
+        <h4>3 · Hidden State</h4>
+        <canvas id="tfFFN" width="220" height="160"></canvas>
+        <p class="microcopy">Last position after attention + FFN</p>
+      </div>
+      <div class="tf-stage">
+        <h4>4 · Prediction</h4>
         <canvas id="tfPred" width="220" height="160"></canvas>
-        <p class="microcopy">Softmax probabilities for next word</p>
+        <p class="microcopy">Output projection → softmax</p>
       </div>
     </div>
 
-    <div class="how">
-      <b>What's happening?</b> This is a drastically simplified transformer with
-      hand-tuned weights on a tiny vocabulary. The real steps are the same:
-      (1) <b>Embed</b> each input token as a vector;
-      (2) Compute <b>self-attention</b> — each token asks "how relevant is every
-      other token to me?" via dot-product scores, then softmax;
-      (3) The context-weighted vectors are projected to produce a probability
-      distribution over the vocabulary — the highest-probability word is the
-      <b>prediction</b>. Real models (GPT, etc.) stack many such layers and
-      use billions of learned parameters, but the core loop is exactly this.
+    <!-- From 20 Words to ChatGPT -->
+    <div class="tf-chapter tf-chapter-final" style="margin-top:16px;">
+      <div class="tf-ch-num">∞</div>
+      <div class="tf-ch-body">
+        <div class="tf-ch-title">From 20 Words to ChatGPT</div>
+        <p>This demo has <b>1 layer, 1 attention head, 20 words, 8-dim embeddings, and hand-tuned weights</b>. GPT-4 uses ~120 layers, 96 heads/layer, 100 k+ vocab, and billions of learned parameters trained on trillions of words. But the core loop is <b>exactly what you just saw</b>: embed → position → attend → FFN → predict → repeat. Stack more layers, train on more data, and you get a machine that writes poetry, debugs code, and passes the bar exam.</p>
+      </div>
+    </div>
+
+    <!-- Collapsible Understanding Section -->
+    <details class="learn-panel tf-understand-panel" open>
+      <summary>🔍 Understand the Transformer — Run It Live</summary>
+      <div class="learn-body">
+        <p><strong>Pick words above, click "Predict", and watch the transformer think in 4 stages:</strong></p>
+        <div class="tf-viz-guide">
+          <div class="tf-guide-item">
+            <div class="tf-guide-num">1</div>
+            <div class="tf-guide-text">
+              <strong>Embed + Position</strong><br/>
+              Each word becomes a vector (8 numbers), plus a position signal so the model knows order.
+            </div>
+          </div>
+          <div class="tf-guide-item">
+            <div class="tf-guide-num">2</div>
+            <div class="tf-guide-text">
+              <strong>Q·K Attention</strong><br/>
+              Tokens ask "who should I look at?" High values = strong connection. Watch verbs focus on nouns, determiners focus back.
+            </div>
+          </div>
+          <div class="tf-guide-item">
+            <div class="tf-guide-num">3</div>
+            <div class="tf-guide-text">
+              <strong>Hidden State (FFN)</strong><br/>
+              The final token's internal state after absorbing context. 8 dimensions encode: noun/verb/place/determiner/physical/mood/color/speed.
+            </div>
+          </div>
+          <div class="tf-guide-item">
+            <div class="tf-guide-num">4</div>
+            <div class="tf-guide-text">
+              <strong>Prediction (Softmax)</strong><br/>
+              Hidden state votes on the next word. Green bar = top choice. Lighter bars = alternatives the model considered.
+            </div>
+          </div>
+        </div>
+        <p style="color:#666; font-size:.9em; margin-top:14px;"><em>💡 Pro tip:</em> Try sequences like "the cat sat on a" (expects "mat"), "the dog" (expects "runs"), or "the happy" (expects "cat"). Watch how each stage refines the prediction.</p>
+      </div>
+    </details>
+
+    <div class="how tf-course">
+      <div class="tf-course-title">&#129504; The Transformer — Zero to Hero</div>
+
+      <div class="tf-chapter">
+        <div class="tf-ch-num">1</div>
+        <div class="tf-ch-body">
+          <div class="tf-ch-title">Embedding — Words Become Numbers</div>
+          <p>A model can't read "cat" — but it can crunch <code>[0.92, 0.08, 0.10, …]</code>. An <b>embedding table</b> maps every word to a unique vector. Similar words land nearby: "cat" and "dog" almost overlap, while "cat" and "on" are far apart.</p>
+          <div class="tf-callout">&#128161; <em>Analogy:</em> GPS coordinates for meaning. "Paris" and "Lyon" are neighbours; "Paris" and "tuna" are continents apart.</div>
+        </div>
+      </div>
+
+      <div class="tf-chapter">
+        <div class="tf-ch-num">2</div>
+        <div class="tf-ch-body">
+          <div class="tf-ch-title">Positional Encoding — "Where Am I?"</div>
+          <p>Without position info, "dog bites man" and "man bites dog" look identical. <b>Positional encoding</b> injects order by adding sine/cosine wave patterns at each slot, so the model knows <em>where</em> each word sits.</p>
+          <div class="tf-eq">x&#7522; = embedding(word&#7522;) + PE(position&#7522;)</div>
+          <div class="tf-callout">&#128161; <em>Analogy:</em> Seat numbers at a dinner table. The script doesn't change, but the actor in Chair 1 has a very different role from the actor in Chair 5.</div>
+        </div>
+      </div>
+
+      <div class="tf-chapter">
+        <div class="tf-ch-num">3</div>
+        <div class="tf-ch-body">
+          <div class="tf-ch-title">Q, K, V — Three Roles for Every Token</div>
+          <p>Each token is projected through three learned weight matrices:</p>
+          <ul class="tf-qkv">
+            <li><b>Query (Q)</b> — "What am I looking for?" The verb asks: "Where's my subject?"</li>
+            <li><b>Key (K)</b> — "What do I advertise?" The determiner says: "I introduce a noun."</li>
+            <li><b>Value (V)</b> — "What info do I carry?" The actual content that flows forward.</li>
+          </ul>
+          <div class="tf-eq">Q = x · W<sub>Q</sub> &emsp; K = x · W<sub>K</sub> &emsp; V = x · W<sub>V</sub></div>
+          <div class="tf-callout">&#128161; <em>Analogy:</em> At a party, Q is your question, K is name-tags other guests wear, and V is the conversation they share once you pick who to talk to.</div>
+        </div>
+      </div>
+
+      <div class="tf-chapter">
+        <div class="tf-ch-num">4</div>
+        <div class="tf-ch-body">
+          <div class="tf-ch-title">Attention — "Who Matters Most?"</div>
+          <p>Each token compares its <b>Query</b> against every earlier token's <b>Key</b> (dot product, scaled by &#8730;d). Softmax turns scores into weights summing to 1. The output is a weighted blend of everyone's <b>Values</b>.</p>
+          <div class="tf-eq">Attention(Q,K,V) = softmax(Q · K<sup>T</sup> / &#8730;d) · V</div>
+          <p>A <b>causal mask</b> prevents peeking at the future — each position only attends to earlier ones. This is what makes it <em>autoregressive</em>: one word at a time, left to right.</p>
+          <div class="tf-callout">&#128161; <em>Analogy:</em> A round-table conversation where "sat" perks up when it hears "cat" — because a verb cares about its subject. The mask is a rule: you can only hear people who spoke <em>before</em> you.</div>
+        </div>
+      </div>
+
+      <div class="tf-chapter">
+        <div class="tf-ch-num">5</div>
+        <div class="tf-ch-body">
+          <div class="tf-ch-title">FFN — Think It Over</div>
+          <p>After attention mixes tokens, each position runs through a <b>feed-forward network</b> (two linear layers with ReLU). This is where the model "digests" context — combining features, spotting patterns, preparing to predict. A <b>residual connection</b> (output = FFN(x) + x) ensures nothing is lost.</p>
+          <div class="tf-eq">FFN(x) = ReLU(x · W<sub>1</sub> + b<sub>1</sub>) · W<sub>2</sub> + b<sub>2</sub></div>
+          <div class="tf-callout">&#128161; <em>Analogy:</em> After gathering opinions from the table (attention), you sit quietly and digest what you heard. The FFN is that quiet moment of reflection before you speak.</div>
+        </div>
+      </div>
+
+      <div class="tf-chapter">
+        <div class="tf-ch-num">6</div>
+        <div class="tf-ch-body">
+          <div class="tf-ch-title">Prediction — The Final Vote</div>
+          <p>The last position's hidden state is multiplied by an <b>output projection matrix</b> to score every word in the vocabulary. <b>Softmax</b> converts scores to probabilities. The highest-probability word wins.</p>
+          <div class="tf-eq">logits = h · W<sub>out</sub> &emsp;&#8594;&emsp; P(next word) = softmax(logits)</div>
+          <div class="tf-callout">&#128161; <em>Analogy:</em> Election day. Every vocab word is a candidate. The context vector casts weighted votes, and softmax tallies them into a probability distribution.</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -535,6 +767,15 @@
       The hidden layer creates new features that bend the space so the output neuron can
       draw a boundary. Edge thickness = weight magnitude; neuron colour = activation.
     </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From 2→4→1 to Billion-Parameter Deep Nets</div>
+          <p>This 2→4→1 network is just a tiny MLP solving a toy problem. Real deep learning stacks hundreds or thousands of layers, each with thousands of neurons. ResNet-50 has 50 layers and 25 million parameters. GPT-4 has ~170 billion. The core loop is identical: apply linear transformation + nonlinearity, repeat, backprop gradients. What changes is scale: more layers mean the network can learn deeper hierarchies of pattern — from pixels to edges to shapes to concepts.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ════════════════════════════════════════════
@@ -561,6 +802,15 @@
       Low degree = underfitting (too simple). High degree = overfitting (memorises noise,
       wiggles wildly). The right panel shows train vs test error — the classic U-shaped
       test curve.
+    </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From Toy Curves to Real-World Generalization</div>
+          <p>This demo shows overfitting on synthetic data where you control the noise level. Real datasets — medical images, financial data, language — are messier and deceptively complex. The bias-variance tradeoff never disappears: too simple a model misses structure; too complex a model learns spurious correlations. Modern solutions include regularization (L1/L2 penalties), dropout, early stopping, data augmentation, and ensemble methods. Even large models with billions of parameters can overfit if your test set is small or unrepresentative.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -600,6 +850,15 @@
       kernels extract different features: edges, blur, sharpening. CNNs <i>learn</i>
       the best kernels for the task.
     </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From Hand-Crafted Filters to Deep Vision</div>
+          <p>This demo manually applies edge/blur/sharpen filters. Real CNNs like ResNet or YOLOv8 stack hundreds of layers, each learning its own filters through gradient descent. Early layers learn simple textures; middle layers combine them into shapes; deep layers recognize objects and scenes. The same convolution operation scales from detecting edges in 28×28 digits (MNIST) to recognizing objects in 4K images. The locality property — each neuron sees only a small neighborhood — is what makes convolution efficient on large images where fully-connected networks would be prohibitively expensive.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ════════════════════════════════════════════
@@ -626,6 +885,15 @@
       the data varies the most. PC1 captures the most variance; PC2 the next most.
       The right panel shows how much variance each component explains. Projecting
       onto PC1 alone reduces 2-D data to 1-D while keeping maximum information.
+    </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From 2-D Toy Data to Compressing Gene Expression</div>
+          <p>This toy example reduces 2D down to 1D. Real PCA tackles massive datasets: genomics researchers use it to compress 20,000+ gene-expression measurements per patient into interpretable 2D scatter plots. Face recognition systems use PCA (eigenfaces) to reduce 200×200 pixel images to vectors of just 50 dimensions while keeping recognition accuracy high. Modern alternatives like t-SNE and UMAP handle non-linear structure better. But PCA remains a workhorse: it is fast, interpretable, and often a crucial first step in exploratory data analysis.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -655,6 +923,15 @@
       or wall (−0.1), it updates values using the Bellman equation. Over time
       the arrows converge to the optimal policy. The heatmap shows cell values.
     </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From Grid Mazes to Autonomous Vehicles &amp; Game-Playing AI</div>
+          <p>This Q-learning agent lives in a tiny 5×5 grid. The same reinforcement learning algorithm powers AlphaGo (which defeated world chess and Go champions), robot manipulation (learning to grasp objects), and self-driving cars (learning safe navigation policies). As state spaces grow (from 25 cells to billions of possible game positions), tabular Q-learning becomes infeasible — you must combine it with deep learning (Deep Q-Networks, DQN). The reward signal is also crucial: a simpler reward function generalizes better and is easier to align with human intent than a complex one.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ════════════════════════════════════════════
@@ -681,6 +958,15 @@
       that best separates the classes (maximum information gain / Gini reduction).
       Each split adds an axis-aligned boundary. More depth = more splits = finer
       regions — but risk overfitting with too many.
+    </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From Single Trees to Random Forests &amp; Gradient Boosting</div>
+          <p>One decision tree is interpretable but often biased (high variance on noisy data). A <b>Random Forest</b> trains hundreds of trees on random subsets and averages their predictions — this ensemble approach typically beats a single deep tree. <b>Gradient Boosting</b> (XGBoost, LightGBM) does something cleverer: it trains trees sequentially, each one correcting the errors of the previous ones. These boosted models often outperform neural networks on tabular data (the kind in spreadsheets). The tradeoff: you lose the single tree's interpretability, but gain predictive power and robustness.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -710,6 +996,15 @@
       <b>chain rule</b>. Green arrows = forward pass (compute output); red arrows =
       backward pass (compute gradients). Each weight is updated: w ← w − η·∂L/∂w.
       This is how <i>all</i> neural networks learn.
+    </div>
+    <div class="scaling-context">
+      <div class="demo-chapter-final">
+        <div class="demo-ch-num">∞</div>
+        <div class="demo-ch-body">
+          <div class="demo-ch-title">From Toy Geometry to Training Trillion-Parameter Models</div>
+          <p>Backpropagation is the engine of deep learning. This toy network has <i>three</i> weights. GPT-4 has <i>~170 billion</i>. Backprop computes gradients for all of them in a single backward pass. The chain rule composes perfectly: ∂L/∂w₁ depends on activations and weights downstream, and the backward pass propagates all these dependencies efficiently. Modern systems use variants: gradient accumulation (for larger batches), mixed precision (train in lower precision to save memory), and distributed backprop (split the computation across hundreds of devices). The core idea — gradient descent via the chain rule — remains unchanged.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -769,12 +1064,13 @@ const lessonContent = [
     ]
   },
   {
-    heading: 'Click to learn the transformer as a conversation game',
-    story: 'Picture a round table where every word in a sentence can lean over and ask, "Who here matters most to me right now?" The word "sat" listens for a subject, and the word "on" looks for a place. Attention is that act of listening selectively. A transformer stacks many rounds of this, so the next word is guessed from a rich web of relationships instead of just the last token alone.',
+    heading: 'Click to learn how a transformer thinks, step by step',
+    story: 'Imagine a classroom where every word in a sentence sits at its own desk. The teacher says: "Turn to the person you need most and share notes." The verb "sat" swivels to face the noun "cat" — it needs a subject. The preposition "on" looks back at the verb — it needs an action to ground itself. This selective note-sharing is <b>self-attention</b>, and it\'s the heartbeat of a transformer. After sharing, each student reflects privately (the <b>feed-forward network</b>), then raises a hand to vote on the next word. This demo runs that exact loop — real Q/K/V projections, sinusoidal positional encoding, causal masking, an FFN, and an output projection — on a tiny 20-word vocabulary with hand-tuned weights.',
     facts: [
-      ['Main idea', 'Each token weighs which earlier tokens matter most.'],
-      ['Why attention helps', 'Important context gets amplified instead of averaged away.'],
-      ['Output', 'The model turns context into probabilities for the next word.']
+      ['Full architecture', 'Embedding + position encoding + Q/K/V attention + FFN + output projection — no shortcuts.'],
+      ['Causal mask', 'Each token can only attend to earlier tokens, so the model predicts left-to-right.'],
+      ['Residual connections', 'The model adds the input back after each sub-layer so information is never lost.'],
+      ['Scaling law', 'Same loop × more layers × more data = GPT-4. The core math is identical.']
     ]
   },
   {
@@ -1938,70 +2234,138 @@ function drawChart(canvas, data, label, colour, yLabel){
 
 /* ═══════════════════════════════════════════════════
    DEMO 4 — Tiny Transformer (next-word prediction)
+   Real architecture: Embed + PosEnc + Q/K/V Attention + FFN + Output Proj
    ═══════════════════════════════════════════════════ */
 (function(){
-  /* ---- Tiny vocabulary & hand-crafted embeddings (dim=8) ---- */
   const VOCAB = [
     'the','cat','dog','sat','on','mat','a','big','small',
     'happy','sad','fish','bird','runs','eats','sleeps',
     'red','blue','fast','slow'
   ];
   const DIM = 8;
-  // Seed-based pseudo-embeddings that encode rough semantics
-  const EMB = {};
-  // Animals / nouns
-  EMB['cat']   = [ 0.9, 0.8, 0.1,-0.2, 0.3, 0.0, 0.4, 0.1];
-  EMB['dog']   = [ 0.8, 0.9, 0.1,-0.1, 0.3, 0.1, 0.3, 0.0];
-  EMB['fish']  = [ 0.7, 0.2, 0.8,-0.3, 0.1, 0.0, 0.2, 0.2];
-  EMB['bird']  = [ 0.6, 0.3, 0.6, 0.5, 0.1, 0.1, 0.2, 0.3];
-  EMB['mat']   = [ 0.1, 0.0, 0.0, 0.0, 0.8, 0.7, 0.1,-0.1];
-  // Determiners
-  EMB['the']   = [ 0.1, 0.0, 0.0, 0.0, 0.1, 0.1, 0.9, 0.8];
-  EMB['a']     = [ 0.1, 0.0, 0.0, 0.0, 0.1, 0.1, 0.8, 0.9];
-  // Verbs
-  EMB['sat']   = [-0.3, 0.2, 0.0, 0.7, 0.5, 0.3,-0.1, 0.0];
-  EMB['runs']  = [-0.2, 0.3, 0.1, 0.8, 0.2, 0.1,-0.1,-0.1];
-  EMB['eats']  = [-0.1, 0.4, 0.3, 0.6, 0.1, 0.0, 0.0, 0.1];
-  EMB['sleeps']= [-0.2, 0.1, 0.0, 0.5, 0.6, 0.4, 0.0, 0.0];
-  // Preposition
-  EMB['on']    = [ 0.0, 0.0, 0.0, 0.2, 0.7, 0.6, 0.3, 0.2];
-  // Adjectives
-  EMB['big']   = [ 0.3, 0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 0.6];
-  EMB['small'] = [ 0.2, 0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5];
-  EMB['happy'] = [ 0.1, 0.5, 0.2, 0.1,-0.1,-0.1, 0.3, 0.3];
-  EMB['sad']   = [ 0.1, 0.4, 0.1, 0.0,-0.2,-0.1, 0.3, 0.2];
-  EMB['red']   = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.6, 0.4];
-  EMB['blue']  = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5];
-  EMB['fast']  = [ 0.1, 0.2, 0.1, 0.6, 0.0, 0.0, 0.2, 0.1];
-  EMB['slow']  = [ 0.0, 0.1, 0.0, 0.4, 0.0, 0.0, 0.2, 0.1];
+  const HDIM = 10;
+  const PE_SCALE = 0.12;
 
-  /* ---- Bigram-ish transition affinities (hand-tuned) ---- */
-  // Given the last token, these biases boost likely next tokens
-  const TRANS = {
-    'the': {cat:.25,dog:.25,mat:.12,fish:.1,bird:.1,big:.05,small:.05,happy:.03,sad:.03,red:.02,blue:.02,fast:.02,slow:.02},
-    'a':   {cat:.22,dog:.22,mat:.1,fish:.1,bird:.1,big:.07,small:.07,happy:.04,sad:.04,red:.02,blue:.02,fast:.02,slow:.02},
-    'cat': {sat:.3,runs:.2,eats:.2,sleeps:.15,on:.05,the:.02,a:.02},
-    'dog': {sat:.25,runs:.25,eats:.2,sleeps:.12,on:.05,the:.02,a:.02},
-    'fish':{eats:.2,sleeps:.2,runs:.15,sat:.15,on:.1,the:.05},
-    'bird':{eats:.2,runs:.2,sleeps:.15,sat:.2,on:.1,the:.05},
-    'sat': {on:.55,the:.1,a:.1,happy:.05,sad:.05},
-    'on':  {the:.4,a:.35,mat:.1,big:.03,small:.03},
-    'runs':{fast:.3,on:.15,the:.1,a:.1,slow:.1},
-    'eats':{the:.25,a:.25,fish:.15,fast:.05,slow:.05},
-    'sleeps':{on:.3,the:.15,a:.15,happy:.05,sad:.05},
-    'big':  {cat:.25,dog:.25,fish:.15,bird:.15,mat:.1},
-    'small':{cat:.25,dog:.25,fish:.15,bird:.15,mat:.1},
-    'happy':{cat:.2,dog:.2,fish:.1,bird:.1,big:.05,small:.05},
-    'sad':  {cat:.2,dog:.2,fish:.1,bird:.1,big:.05,small:.05},
-    'red':  {cat:.2,dog:.15,fish:.15,bird:.15,mat:.15},
-    'blue': {cat:.15,dog:.15,fish:.2,bird:.2,mat:.15},
-    'fast': {cat:.2,dog:.25,fish:.15,bird:.2},
-    'slow': {cat:.2,dog:.2,fish:.2,bird:.15,mat:.1},
-    'mat':  {the:.2,a:.2,sat:.1,runs:.05,eats:.05},
+  /* ---- Structured embeddings (dim=8) ----
+     d0:noun  d1:verb  d2:spatial  d3:determiner
+     d4:phys-adj  d5:mood-adj  d6:color-adj  d7:speed */
+  const EMB = {
+    'the':    [ 0.05, 0.05, 0.12, 0.95, 0.08, 0.05, 0.05, 0.05],
+    'a':      [ 0.05, 0.05, 0.12, 0.88, 0.12, 0.05, 0.05, 0.05],
+    'cat':    [ 0.92, 0.08, 0.10, 0.05, 0.12, 0.18, 0.08, 0.28],
+    'dog':    [ 0.88, 0.08, 0.10, 0.05, 0.18, 0.14, 0.08, 0.38],
+    'fish':   [ 0.78, 0.06, 0.18, 0.05, 0.08, 0.08, 0.14, 0.12],
+    'bird':   [ 0.74, 0.06, 0.14, 0.05, 0.08, 0.12, 0.18, 0.42],
+    'mat':    [ 0.28, 0.05, 0.90, 0.05, 0.08, 0.05, 0.18, 0.05],
+    'sat':    [ 0.06, 0.90, 0.28, 0.05, 0.05, 0.08, 0.05, 0.10],
+    'runs':   [ 0.06, 0.88, 0.08, 0.05, 0.05, 0.05, 0.05, 0.72],
+    'eats':   [ 0.06, 0.85, 0.05, 0.05, 0.05, 0.08, 0.05, 0.22],
+    'sleeps': [ 0.06, 0.80, 0.14, 0.05, 0.05, 0.18, 0.05, 0.06],
+    'on':     [ 0.06, 0.14, 0.88, 0.22, 0.05, 0.05, 0.05, 0.05],
+    'big':    [ 0.18, 0.05, 0.05, 0.08, 0.92, 0.05, 0.05, 0.05],
+    'small':  [ 0.18, 0.05, 0.05, 0.08, 0.88, 0.05, 0.05, 0.05],
+    'happy':  [ 0.12, 0.05, 0.05, 0.08, 0.05, 0.90, 0.05, 0.12],
+    'sad':    [ 0.12, 0.05, 0.05, 0.08, 0.05, 0.85, 0.05, 0.06],
+    'red':    [ 0.12, 0.05, 0.05, 0.08, 0.18, 0.05, 0.90, 0.05],
+    'blue':   [ 0.12, 0.05, 0.05, 0.08, 0.18, 0.05, 0.85, 0.05],
+    'fast':   [ 0.08, 0.18, 0.05, 0.05, 0.05, 0.08, 0.05, 0.92],
+    'slow':   [ 0.08, 0.14, 0.05, 0.05, 0.05, 0.08, 0.05, 0.88],
+  };
+
+  /* ---- Sinusoidal positional encoding ---- */
+  function posEnc(pos){
+    const pe = new Array(DIM);
+    for(let i=0;i<DIM;i++){
+      const freq = 1/Math.pow(10000,(2*Math.floor(i/2))/DIM);
+      pe[i] = (i%2===0 ? Math.sin(pos*freq) : Math.cos(pos*freq)) * PE_SCALE;
+    }
+    return pe;
+  }
+
+  /* ---- Projection matrices (DIM×DIM) ---- */
+  const Wq = [
+    [0.25,0.00,0.00,0.60,0.40,0.25,0.25,0.00],
+    [0.65,0.20,0.10,0.00,0.00,0.05,0.00,0.15],
+    [0.05,0.55,0.25,0.10,0.00,0.00,0.00,0.05],
+    [0.00,0.05,0.55,0.20,0.20,0.10,0.10,0.00],
+    [0.10,0.00,0.00,0.50,0.25,0.05,0.10,0.00],
+    [0.15,0.00,0.00,0.45,0.10,0.25,0.05,0.00],
+    [0.15,0.00,0.00,0.45,0.10,0.05,0.25,0.00],
+    [0.20,0.20,0.00,0.00,0.00,0.05,0.00,0.25],
+  ];
+  const Wk = [
+    [0.80,0.00,0.05,0.10,0.05,0.05,0.05,0.05],
+    [0.00,0.80,0.05,0.00,0.00,0.05,0.00,0.10],
+    [0.00,0.05,0.80,0.10,0.00,0.00,0.00,0.00],
+    [0.05,0.00,0.05,0.80,0.10,0.10,0.10,0.00],
+    [0.10,0.00,0.00,0.10,0.80,0.00,0.00,0.00],
+    [0.05,0.05,0.00,0.10,0.00,0.80,0.00,0.00],
+    [0.05,0.00,0.00,0.10,0.00,0.00,0.80,0.00],
+    [0.00,0.10,0.00,0.00,0.00,0.00,0.00,0.80],
+  ];
+  const Wv = [
+    [0.85,0.05,0.10,0.00,0.00,0.00,0.00,0.00],
+    [0.05,0.85,0.00,0.10,0.00,0.00,0.00,0.00],
+    [0.10,0.00,0.85,0.00,0.05,0.00,0.00,0.00],
+    [0.00,0.10,0.00,0.85,0.00,0.05,0.00,0.00],
+    [0.00,0.00,0.05,0.00,0.85,0.05,0.05,0.00],
+    [0.00,0.00,0.00,0.05,0.05,0.85,0.00,0.05],
+    [0.00,0.00,0.00,0.00,0.05,0.00,0.85,0.05],
+    [0.00,0.00,0.00,0.00,0.00,0.05,0.05,0.85],
+  ];
+
+  /* ---- FFN weights: DIM→HDIM→DIM with ReLU ---- */
+  const W1 = [ // HDIM × DIM
+    [0.60,0.00,0.10,0.00,0.20,0.00,0.10,0.00],
+    [0.00,0.60,0.00,0.10,0.00,0.20,0.00,0.10],
+    [0.10,0.00,0.60,0.00,0.10,0.00,0.20,0.00],
+    [0.00,0.10,0.00,0.60,0.00,0.10,0.00,0.20],
+    [0.30,0.00,0.10,0.00,0.60,0.00,0.10,0.00],
+    [0.00,0.30,0.00,0.10,0.00,0.60,0.00,0.10],
+    [0.20,0.00,0.30,0.00,0.10,0.00,0.60,0.00],
+    [0.00,0.20,0.00,0.30,0.00,0.10,0.00,0.60],
+    [0.10,0.00,0.10,0.00,0.10,0.00,0.10,0.00],
+    [0.00,0.10,0.00,0.10,0.00,0.10,0.00,0.10],
+  ];
+  const b1 = [-0.05,-0.05,-0.05,-0.05,-0.05,-0.05,-0.05,-0.05,-0.05,-0.05];
+  const W2 = [ // DIM × HDIM
+    [0.50,0.00,0.10,0.00,0.20,0.00,0.10,0.00,0.10,0.00],
+    [0.00,0.50,0.00,0.10,0.00,0.20,0.00,0.10,0.00,0.10],
+    [0.10,0.00,0.50,0.00,0.10,0.00,0.20,0.00,0.10,0.00],
+    [0.00,0.10,0.00,0.50,0.00,0.10,0.00,0.20,0.00,0.10],
+    [0.20,0.00,0.10,0.00,0.50,0.00,0.10,0.00,0.10,0.00],
+    [0.00,0.20,0.00,0.10,0.00,0.50,0.00,0.10,0.00,0.10],
+    [0.10,0.00,0.20,0.00,0.10,0.00,0.50,0.00,0.10,0.00],
+    [0.00,0.10,0.00,0.20,0.00,0.10,0.00,0.50,0.00,0.10],
+  ];
+  const b2 = [0,0,0,0,0,0,0,0];
+
+  /* ---- Output (unembedding) matrix ---- */
+  const UNEMB = {
+    'the':    [0.00,0.50,0.65,0.00,0.00,0.00,0.00,0.05],
+    'a':      [0.00,0.45,0.60,0.00,0.00,0.00,0.00,0.05],
+    'cat':    [0.00,0.00,0.00,0.60,0.40,0.30,0.25,0.00],
+    'dog':    [0.00,0.00,0.00,0.55,0.45,0.25,0.20,0.05],
+    'fish':   [0.00,0.00,0.05,0.55,0.30,0.20,0.35,0.00],
+    'bird':   [0.00,0.00,0.00,0.55,0.30,0.25,0.35,0.05],
+    'mat':    [0.00,0.00,0.90,0.55,0.10,0.05,0.15,0.00],
+    'sat':    [0.80,0.00,0.05,0.00,0.05,0.05,0.00,0.05],
+    'runs':   [0.75,0.00,0.00,0.00,0.05,0.00,0.00,0.15],
+    'eats':   [0.75,0.00,0.00,0.00,0.05,0.05,0.00,0.05],
+    'sleeps': [0.70,0.00,0.05,0.00,0.05,0.10,0.00,0.00],
+    'on':     [0.00,0.80,0.15,0.00,0.00,0.00,0.00,0.00],
+    'big':    [0.05,0.00,0.00,0.60,0.30,0.10,0.10,0.00],
+    'small':  [0.05,0.00,0.00,0.60,0.30,0.10,0.10,0.00],
+    'happy':  [0.05,0.00,0.00,0.55,0.10,0.25,0.10,0.00],
+    'sad':    [0.05,0.00,0.00,0.55,0.10,0.25,0.10,0.00],
+    'red':    [0.05,0.00,0.00,0.55,0.15,0.10,0.25,0.00],
+    'blue':   [0.05,0.00,0.00,0.55,0.15,0.10,0.25,0.00],
+    'fast':   [0.05,0.50,0.00,0.00,0.00,0.00,0.00,0.40],
+    'slow':   [0.05,0.50,0.00,0.00,0.00,0.00,0.00,0.35],
   };
 
   let prompt = [];
-  let lastResult = null; // { embs, attW, probs, predicted }
+  let lastResult = null;
 
   /* ---- Build word buttons ---- */
   const wDiv = document.getElementById('tfWords');
@@ -2014,7 +2378,7 @@ function drawChart(canvas, data, label, colour, yLabel){
 
   function renderPrompt(){
     const pd=document.getElementById('tfPrompt');
-    if(prompt.length===0){ pd.innerHTML='<span class="placeholder">your prompt appears here…</span>'; return; }
+    if(prompt.length===0){ pd.innerHTML='<span class="placeholder">your prompt appears here\u2026</span>'; return; }
     pd.innerHTML=prompt.map(w=>'<span class="chip">'+w+'</span>').join('');
     lastResult=null;
     document.getElementById('tfPipe').style.display='none';
@@ -2023,89 +2387,95 @@ function drawChart(canvas, data, label, colour, yLabel){
 
   /* ---- Math helpers ---- */
   function dot(a,b){ let s=0; for(let i=0;i<a.length;i++) s+=a[i]*b[i]; return s; }
-  function norm(a){ return Math.sqrt(dot(a,a)); }
   function softmax(arr){
-    const max=Math.max(...arr);
-    const exps=arr.map(v=>Math.exp(v-max));
-    const sum=exps.reduce((a,b)=>a+b,0);
-    return exps.map(v=>v/sum);
+    const mx=Math.max(...arr);
+    const exps=arr.map(v=>Math.exp(v-mx));
+    const sm=exps.reduce((a,b)=>a+b,0);
+    return exps.map(v=>v/sm);
   }
   function vecAdd(a,b){ return a.map((v,i)=>v+b[i]); }
   function vecScale(a,s){ return a.map(v=>v*s); }
+  function matVec(M,v){ return M.map(row=>dot(row,v)); }
+  function relu(x){ return x.map(v=>Math.max(0,v)); }
 
-  /* ---- Forward pass of our "tiny transformer" ---- */
+  /* ---- Forward pass: real transformer ---- */
   function forward(tokens){
     const N=tokens.length;
-    // 1. Look up embeddings
-    const embs = tokens.map(t=>EMB[t].slice());
 
-    // 2. Self-attention (single head, no projection for simplicity)
-    // Scores: score[i][j] = dot(emb[i], emb[j]) / sqrt(dim)  (causal: j<=i)
-    const scores = [];
+    // 1. Embeddings + positional encoding
+    const embs = tokens.map((t,i)=>vecAdd(EMB[t].slice(), posEnc(i)));
+
+    // 2. Q, K, V projections
+    const Q = embs.map(e=>matVec(Wq,e));
+    const K = embs.map(e=>matVec(Wk,e));
+    const V = embs.map(e=>matVec(Wv,e));
+
+    // 3. Scaled dot-product attention with causal mask
     const attW = [];
     for(let i=0;i<N;i++){
       const row=[];
       for(let j=0;j<N;j++){
-        row.push(j<=i ? dot(embs[i],embs[j])/Math.sqrt(DIM) : -1e9);
+        row.push(j<=i ? dot(Q[i],K[j])/Math.sqrt(DIM) : -1e9);
       }
       attW.push(softmax(row));
     }
 
-    // 3. Context vectors = weighted sum of embeddings
-    const ctx = [];
+    // 4. Attention output: weighted sum of V
+    const attOut = [];
     for(let i=0;i<N;i++){
-      let c = new Array(DIM).fill(0);
-      for(let j=0;j<N;j++) c = vecAdd(c, vecScale(embs[j], attW[i][j]));
-      ctx.push(c);
+      let c=new Array(DIM).fill(0);
+      for(let j=0;j<N;j++) c=vecAdd(c,vecScale(V[j],attW[i][j]));
+      attOut.push(c);
     }
 
-    // 4. Predict next token from last context vector
-    // Score each vocab word: dot(ctx_last, emb_word) + transition bias
-    const lastCtx = ctx[N-1];
-    const lastTok = tokens[N-1];
-    const trans = TRANS[lastTok]||{};
-    const logits = VOCAB.map(w=>{
-      let s = dot(lastCtx, EMB[w]) / Math.sqrt(DIM);
-      s += (trans[w]||0)*3; // transition bias
-      return s;
+    // 5. Residual connection #1
+    const res1 = embs.map((e,i)=>vecAdd(e,attOut[i]));
+
+    // 6. FFN: ReLU(x*W1+b1)*W2+b2
+    const ffnOut = res1.map(x=>{
+      const hidden = relu(vecAdd(matVec(W1,x),b1));
+      return vecAdd(matVec(W2,hidden),b2);
     });
+
+    // 7. Residual connection #2
+    const res2 = res1.map((r,i)=>vecAdd(r,ffnOut[i]));
+
+    // 8. Output projection: logits / temperature -> softmax
+    const lastH = res2[N-1];
+    const TEMP = 0.45;
+    const logits = VOCAB.map(w=>dot(lastH,UNEMB[w])/TEMP);
     const probs = softmax(logits);
     const maxIdx = probs.indexOf(Math.max(...probs));
 
-    return { embs, attW, probs, predicted:VOCAB[maxIdx] };
+    return { embs, attW, probs, predicted:VOCAB[maxIdx], lastH, ffnOut:ffnOut[N-1] };
   }
 
   /* ---- Visualisation helpers ---- */
   function heatColour(v){
-    // 0=white, 1=deep blue
     const r=Math.round(255-200*v), g=Math.round(255-200*v), b=Math.round(255-60*v);
-    return `rgb(${r},${g},${b})`;
+    return 'rgb('+r+','+g+','+b+')';
   }
+  function sizeCV(cv,w,h){ cv.width=w; cv.height=h; cv.style.width=w+'px'; cv.style.height=h+'px'; }
 
   function drawEmbCanvas(embs,tokens){
-    const cv=document.getElementById('tfEmb'), cx=cv.getContext('2d');
-    const w=cv.width, h=cv.height;
+    const cv=document.getElementById('tfEmb'), N=tokens.length, D=DIM;
+    const cellW=24, cellH=22, padL=50, padT=24;
+    sizeCV(cv, padL+cellW*D+8, padT+cellH*N+4);
+    const cx=cv.getContext('2d'), w=cv.width, h=cv.height;
     cx.clearRect(0,0,w,h);
-    const N=tokens.length, D=DIM;
-    const cellW=Math.min(24, (w-60)/D);
-    const cellH=Math.min(22, (h-30)/N);
-    const ox=(w-cellW*D)/2, oy=24;
+    const ox=padL, oy=padT;
 
-    // Column headers (dim indices)
     cx.fillStyle='#7f8c8d'; cx.font='9px sans-serif'; cx.textAlign='center';
     for(let d=0;d<D;d++) cx.fillText('d'+d, ox+d*cellW+cellW/2, oy-4);
 
-    // Rows
     for(let i=0;i<N;i++){
-      // Row label
       cx.fillStyle='#2c3e50'; cx.font='bold 11px sans-serif'; cx.textAlign='right';
       cx.fillText(tokens[i], ox-6, oy+i*cellH+cellH/2+4);
       for(let d=0;d<D;d++){
         const v=embs[i][d];
-        const t=(v+1)/2; // normalise roughly to 0-1
-        cx.fillStyle=heatColour(Math.max(0,Math.min(1,t)));
+        const t=Math.max(0,Math.min(1,(v+0.5)/1.8));
+        cx.fillStyle=heatColour(t);
         cx.fillRect(ox+d*cellW, oy+i*cellH, cellW-1, cellH-1);
-        // Value text
         cx.fillStyle=t>0.6?'#fff':'#2c3e50'; cx.font='8px sans-serif'; cx.textAlign='center';
         cx.fillText(v.toFixed(1), ox+d*cellW+cellW/2, oy+i*cellH+cellH/2+3);
       }
@@ -2113,25 +2483,22 @@ function drawChart(canvas, data, label, colour, yLabel){
   }
 
   function drawAttCanvas(attW,tokens){
-    const cv=document.getElementById('tfAtt'), cx=cv.getContext('2d');
-    const w=cv.width, h=cv.height;
+    const cv=document.getElementById('tfAtt'), N=tokens.length;
+    const cellS=Math.max(28,Math.min(36,140/N)), padL=50, padT=34;
+    sizeCV(cv, padL+cellS*N+10, padT+cellS*N+4);
+    const cx=cv.getContext('2d'), w=cv.width, h=cv.height;
     cx.clearRect(0,0,w,h);
-    const N=tokens.length;
-    const cellS=Math.min(28, (w-60)/N, (h-50)/N);
-    const ox=(w-cellS*N)/2+20, oy=30;
+    const ox=padL, oy=padT;
 
-    // Column headers
     cx.fillStyle='#7f8c8d'; cx.font='9px sans-serif'; cx.textAlign='center';
     for(let j=0;j<N;j++) cx.fillText(tokens[j], ox+j*cellS+cellS/2, oy-4);
-    // Row labels
     cx.textAlign='right';
     for(let i=0;i<N;i++) cx.fillText(tokens[i], ox-4, oy+i*cellS+cellS/2+3);
 
-    // Axis label
     cx.fillStyle='#95a5a6'; cx.font='8px sans-serif';
-    cx.textAlign='center'; cx.fillText('Key →', ox+cellS*N/2, oy-14);
+    cx.textAlign='center'; cx.fillText('Key \u2192', ox+cellS*N/2, oy-14);
     cx.save(); cx.translate(ox-18, oy+cellS*N/2); cx.rotate(-Math.PI/2);
-    cx.fillText('Query →',0,0); cx.restore();
+    cx.fillText('Query \u2192',0,0); cx.restore();
 
     for(let i=0;i<N;i++) for(let j=0;j<N;j++){
       const v=attW[i][j];
@@ -2142,11 +2509,36 @@ function drawChart(canvas, data, label, colour, yLabel){
     }
   }
 
+  const DIM_LABELS = ['noun','verb','place','det','phys','mood','color','speed'];
+  function drawFFNCanvas(lastH){
+    const cv=document.getElementById('tfFFN'), cx=cv.getContext('2d');
+    const w=cv.width, h=cv.height;
+    cx.clearRect(0,0,w,h);
+    const barPad={t:20,l:52,r:14,b:4};
+    const barArea=w-barPad.l-barPad.r;
+    const barH=(h-barPad.t-barPad.b)/DIM;
+    const maxVal=Math.max(...lastH.map(Math.abs),0.01);
+    cx.fillStyle='#2c3e50'; cx.font='bold 10px sans-serif'; cx.textAlign='center';
+    cx.fillText('Final hidden state (d0\u2013d7)', w/2, 13);
+    for(let d=0;d<DIM;d++){
+      const y=barPad.t+d*barH;
+      const v=lastH[d];
+      const bw=Math.abs(v)/maxVal*barArea;
+      cx.fillStyle=v>=0?'#3498db':'#e74c3c';
+      cx.globalAlpha=0.7;
+      cx.fillRect(barPad.l,y+2,bw,barH-4);
+      cx.globalAlpha=1;
+      cx.fillStyle='#2c3e50'; cx.font='10px sans-serif'; cx.textAlign='right';
+      cx.fillText(DIM_LABELS[d], barPad.l-4, y+barH/2+4);
+      cx.fillStyle='#7f8c8d'; cx.font='9px sans-serif'; cx.textAlign='left';
+      cx.fillText(v.toFixed(2), barPad.l+bw+4, y+barH/2+4);
+    }
+  }
+
   function drawPredCanvas(probs){
     const cv=document.getElementById('tfPred'), cx=cv.getContext('2d');
     const w=cv.width, h=cv.height;
     cx.clearRect(0,0,w,h);
-    // Show top-8 predictions as horizontal bars
     const indexed=probs.map((p,i)=>({w:VOCAB[i],p})).sort((a,b)=>b.p-a.p).slice(0,8);
     const barPad={t:18,l:60,r:14,b:4};
     const barArea=w-barPad.l-barPad.r;
@@ -2155,15 +2547,13 @@ function drawChart(canvas, data, label, colour, yLabel){
     cx.fillText('Top predictions (softmax)', w/2, 12);
     indexed.forEach((item,j)=>{
       const y=barPad.t+j*barH;
-      const bw=item.p*barArea/indexed[0].p; // scale relative to top
+      const bw=item.p*barArea/indexed[0].p;
       cx.fillStyle=j===0?'#27ae60':'#3498db';
       cx.globalAlpha=j===0?1:0.55;
       cx.fillRect(barPad.l,y+2,bw,barH-4);
       cx.globalAlpha=1;
-      // Label
       cx.fillStyle='#2c3e50'; cx.font='11px sans-serif'; cx.textAlign='right';
       cx.fillText(item.w, barPad.l-4, y+barH/2+4);
-      // Prob
       cx.fillStyle='#7f8c8d'; cx.font='10px sans-serif'; cx.textAlign='left';
       cx.fillText((item.p*100).toFixed(1)+'%', barPad.l+bw+4, y+barH/2+4);
     });
@@ -2175,13 +2565,12 @@ function drawChart(canvas, data, label, colour, yLabel){
     const res = forward(prompt);
     lastResult = res;
 
-    // Show pipeline
-    document.getElementById('tfPipe').style.display='flex';
+    document.getElementById('tfPipe').style.display='grid';
     drawEmbCanvas(res.embs, prompt);
     drawAttCanvas(res.attW, prompt);
+    drawFFNCanvas(res.lastH);
     drawPredCanvas(res.probs);
 
-    // Add predicted word as green chip
     prompt.push(res.predicted);
     const pd=document.getElementById('tfPrompt');
     pd.innerHTML=prompt.map((w,i)=>{
@@ -2190,7 +2579,7 @@ function drawChart(canvas, data, label, colour, yLabel){
     }).join('');
 
     document.getElementById('tfInfo').textContent=
-      'Predicted: "'+res.predicted+'" ('+((Math.max(...res.probs))*100).toFixed(1)+'% confidence). Click Predict again to continue!';
+      'Predicted: \u201c'+res.predicted+'\u201d ('+((Math.max(...res.probs))*100).toFixed(1)+'% confidence). Click Predict again to continue!';
   };
 
   window.tfReset=function(){
