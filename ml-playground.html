@@ -7,19 +7,64 @@
   <link rel="stylesheet" href="style.css">
   <style>
     /* ── Layout ── */
-    .pg { max-width: 1060px; margin: 0 auto 60px; }
-    .tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 28px; flex-wrap: wrap; }
+    .pg { max-width: 1060px; margin: 0 auto 60px; padding: 0 18px; }
+    .intro {
+      margin: 18px auto 14px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(52,152,219,.10), rgba(46,204,113,.08));
+      border: 1px solid rgba(52,152,219,.18);
+      box-shadow: 0 10px 28px rgba(0,0,0,.05);
+    }
+    .intro h1 { margin: 0 0 6px; color: #1f3b53; font-size: clamp(1.3rem, 2.2vw, 1.8rem); }
+    .intro p { margin: 0; color: #48606f; line-height: 1.55; max-width: 64ch; font-size: .95rem; }
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(52,152,219,.12);
+      color: var(--primary);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .jump-hint { margin-top: 8px; font-size: .8rem; color: #668090; }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      scroll-padding-inline: 18px;
+    }
     .tabs button {
-      padding: 10px 22px; border: 2px solid var(--primary); background: #fff;
-      border-radius: 24px; font-weight: 700; font-size: .92em; cursor: pointer;
-      color: var(--primary); transition: .2s;
+      padding: 10px 22px;
+      border: 2px solid var(--primary);
+      background: #fff;
+      border-radius: 24px;
+      font-weight: 700;
+      font-size: .92em;
+      cursor: pointer;
+      color: var(--primary);
+      transition: .2s;
+      white-space: nowrap;
     }
     .tabs button.on { background: var(--primary); color: #fff; }
     .tabs button:hover:not(.on) { background: #eaf2f8; }
+    .tabs button:focus-visible {
+      outline: 3px solid rgba(52,152,219,.25);
+      outline-offset: 2px;
+    }
 
     .card {
-      background: #fff; border: 1px solid var(--border); border-radius: 14px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.06); padding: 28px 24px; display: none;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.06);
+      padding: 28px 24px;
+      display: none;
     }
     .card.on { display: block; }
     .card h2 { text-align: center; color: var(--primary); margin-bottom: 4px; }
@@ -27,33 +72,55 @@
 
     /* ── Canvas ── */
     .canvas-wrap {
-      position: relative; margin: 0 auto;
-      border-radius: 10px; overflow: hidden; border: 1px solid var(--border);
+      position: relative;
+      margin: 0 auto;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
     }
-    .canvas-wrap canvas { display: block; width: 100%; height: auto; cursor: crosshair; }
+    .canvas-wrap canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      cursor: crosshair;
+      touch-action: manipulation;
+    }
 
     /* ── Side-by-side row ── */
     .demo-row { display: flex; gap: 16px; align-items: stretch; }
     .demo-row .canvas-wrap { flex: 1; min-width: 0; }
     .demo-row .chart-wrap {
-      width: 280px; min-width: 220px; flex-shrink: 0;
-      border-radius: 10px; overflow: hidden; border: 1px solid var(--border);
-      background: #f9fafb; display: flex; align-items: center; justify-content: center;
+      width: 280px;
+      min-width: 220px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .demo-row .chart-wrap canvas { display: block; width: 100%; height: auto; }
-    @media(max-width:760px){
-      .demo-row { flex-direction: column; }
-      .demo-row .chart-wrap { width: 100%; }
-    }
 
     /* ── Controls ── */
     .ctrl {
-      margin-top: 14px; display: flex; flex-wrap: wrap;
-      justify-content: center; gap: 10px; align-items: center;
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      align-items: center;
     }
     .ctrl button {
-      padding: 7px 16px; border: none; border-radius: 6px;
-      font-weight: 600; font-size: .88em; cursor: pointer; color: #fff;
+      padding: 7px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: .88em;
+      cursor: pointer;
+      color: #fff;
+      min-height: 38px;
     }
     .btn-go  { background: var(--primary); }
     .btn-go:hover { background: var(--accent); }
@@ -65,16 +132,111 @@
 
     /* ── Info strip ── */
     .info {
-      margin-top: 10px; text-align: center; font-size: .88em;
-      color: #7f8c8d; min-height: 22px;
+      margin-top: 10px;
+      text-align: center;
+      font-size: .88em;
+      color: #5f7482;
+      min-height: 22px;
+      padding: 8px 12px;
+      background: #f8fbfd;
+      border: 1px solid rgba(127,140,141,.18);
+      border-radius: 10px;
+    }
+
+    /* ── Optional crash course ── */
+    .learn-panel {
+      margin-top: 14px;
+      border: 1px solid rgba(52,152,219,.18);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(234,242,248,.55), rgba(255,255,255,.95));
+      overflow: hidden;
+    }
+    .learn-panel summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .learn-panel summary::-webkit-details-marker { display: none; }
+    .learn-panel summary:hover { background: rgba(52,152,219,.04); }
+    .learn-title { display: flex; flex-direction: column; gap: 2px; }
+    .learn-kicker {
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+    .learn-heading {
+      font-size: .96rem;
+      font-weight: 700;
+      color: #233847;
+    }
+    .learn-arrow {
+      color: #6d8795;
+      font-size: 1.1rem;
+      transform: rotate(0deg);
+      transition: transform .2s ease;
+    }
+    .learn-panel[open] .learn-arrow { transform: rotate(90deg); }
+    .learn-body {
+      padding: 0 16px 16px;
+      color: #385160;
+    }
+    .learn-story {
+      margin: 0 0 12px;
+      line-height: 1.7;
+      font-size: .92rem;
+    }
+    .learn-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+    .learn-fact {
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid rgba(189,195,199,.35);
+      border-radius: 10px;
+    }
+    .learn-fact-label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #6b8796;
+    }
+    .learn-fact-text {
+      font-size: .87rem;
+      line-height: 1.5;
+      color: #2c4654;
     }
 
     /* ── How-it-works box ── */
     .how {
-      margin-top: 18px; background: #f7f9fb; border-radius: 8px;
-      padding: 14px 18px; font-size: .9em; color: #34495e; line-height: 1.65;
+      margin-top: 18px;
+      background: #f7f9fb;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: .9em;
+      color: #34495e;
+      line-height: 1.65;
     }
     .how b { color: var(--primary); }
+
+    /* ── Utility ── */
+    .side-stack { flex-direction: column; align-items: flex-start; padding: 14px; }
+    .side-stack.centered { align-items: center; }
+    .math-panel { font-size: .82em; color: #34495e; line-height: 1.7; margin-top: 10px; }
+    .math-panel.mono { font-family: monospace; font-size: .8em; }
+    .note-muted { text-align: center; font-size: .88em; color: #7f8c8d; margin-bottom: 6px; }
+    .microcopy { font-size: .76em; color: #7f8c8d; margin: 4px 0 0; }
+    .placeholder { color: #bdc3c7; }
 
     /* ── Transformer demo ── */
     .tf-input { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
@@ -106,6 +268,39 @@
     }
     .tf-stage h4 { margin:0 0 6px; font-size:.82em; color:var(--primary); text-transform:uppercase; letter-spacing:.5px; }
     .tf-stage canvas { display:block; margin:0 auto; border-radius:4px; }
+
+    @media(max-width:900px){
+      .tabs {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        margin: 0 -18px 22px;
+        padding: 10px 18px 12px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        background: rgba(255,255,255,.94);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(189,195,199,.35);
+      }
+      .tabs::-webkit-scrollbar { height: 6px; }
+      .tabs::-webkit-scrollbar-thumb { background: rgba(149,165,166,.45); border-radius: 999px; }
+      .intro { margin-top: 14px; padding: 14px 16px; }
+    }
+
+    @media(max-width:760px){
+      .pg { padding: 0 14px; }
+      .demo-row { flex-direction: column; }
+      .demo-row .chart-wrap { width: 100%; min-width: 0; }
+      .card { padding: 22px 16px; }
+      .learn-panel summary { padding: 12px 14px; }
+      .learn-body { padding: 0 14px 14px; }
+      .ctrl { justify-content: stretch; }
+      .ctrl label { width: 100%; justify-content: space-between; }
+      .ctrl button { flex: 1 1 140px; }
+      .tf-stage { min-width: 100%; max-width: none; }
+      .side-stack { align-items: stretch; }
+    }
   </style>
 </head>
 <body>
@@ -124,25 +319,32 @@
 
 <div class="pg">
 
-  <div class="tabs">
-    <button class="on" onclick="show(0)">Gradient Descent</button>
-    <button onclick="show(1)">Classify (SVM)</button>
-    <button onclick="show(2)">K-Means</button>
-    <button onclick="show(3)">Embeddings</button>
-    <button onclick="show(4)">Transformer</button>
-    <button onclick="show(5)">Neural Net</button>
-    <button onclick="show(6)">Overfitting</button>
-    <button onclick="show(7)">Convolution</button>
-    <button onclick="show(8)">PCA</button>
-    <button onclick="show(9)">RL Agent</button>
-    <button onclick="show(10)">Decision Tree</button>
-    <button onclick="show(11)">Backprop</button>
+  <section class="intro" aria-label="ML Playground overview">
+    <span class="eyebrow">Interactive topics</span>
+    <h1>Machine learning concepts you can poke at</h1>
+    <p>Short visual demos for optimization, clustering, transformers, reinforcement learning, and more.</p>
+    <p class="jump-hint">Use the tabs to switch topics, or jump straight to a section with <span class="placeholder">#transformer</span>.</p>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Machine learning demos">
+    <button type="button" class="on" id="tab0" role="tab" aria-selected="true" aria-controls="c0" onclick="show(0)">Gradient Descent</button>
+    <button type="button" id="tab1" role="tab" aria-selected="false" aria-controls="c1" onclick="show(1)">Classify (SVM)</button>
+    <button type="button" id="tab2" role="tab" aria-selected="false" aria-controls="c2" onclick="show(2)">K-Means</button>
+    <button type="button" id="tab3" role="tab" aria-selected="false" aria-controls="c3" onclick="show(3)">Embeddings</button>
+    <button type="button" id="tab4" role="tab" aria-selected="false" aria-controls="c4" onclick="show(4)">Transformer</button>
+    <button type="button" id="tab5" role="tab" aria-selected="false" aria-controls="c5" onclick="show(5)">Neural Net</button>
+    <button type="button" id="tab6" role="tab" aria-selected="false" aria-controls="c6" onclick="show(6)">Overfitting</button>
+    <button type="button" id="tab7" role="tab" aria-selected="false" aria-controls="c7" onclick="show(7)">Convolution</button>
+    <button type="button" id="tab8" role="tab" aria-selected="false" aria-controls="c8" onclick="show(8)">PCA</button>
+    <button type="button" id="tab9" role="tab" aria-selected="false" aria-controls="c9" onclick="show(9)">RL Agent</button>
+    <button type="button" id="tab10" role="tab" aria-selected="false" aria-controls="c10" onclick="show(10)">Decision Tree</button>
+    <button type="button" id="tab11" role="tab" aria-selected="false" aria-controls="c11" onclick="show(11)">Backprop</button>
   </div>
 
   <!-- ════════════════════════════════════════════  
        DEMO 0 — Gradient Descent on a loss surface  
        ════════════════════════════════════════════ -->
-  <div class="card on" id="c0">
+  <div class="card on" id="c0" role="tabpanel" aria-labelledby="tab0">
     <h2>Gradient Descent</h2>
     <p class="sub">A ball rolls downhill on a loss surface to find the minimum.</p>
     <div class="demo-row">
@@ -158,7 +360,7 @@
       <button class="btn-go" id="gdGo">⏸ Pause</button>
       <button class="btn-rst" onclick="gdReset()">Restart</button>
     </div>
-    <div class="info" id="gdInfo">Running…</div>
+    <div class="info" id="gdInfo" aria-live="polite">Running…</div>
     <div class="how">
       <b>What's happening?</b> The colour map shows a bowl-shaped loss function
       <i>L(w₁, w₂) = w₁² + w₂²</i>. The ball follows the negative gradient
@@ -170,7 +372,7 @@
   <!-- ════════════════════════════════════════════  
        DEMO 1 — SVM / Linear Classifier  
        ════════════════════════════════════════════ -->
-  <div class="card" id="c1">
+  <div class="card" id="c1" role="tabpanel" aria-labelledby="tab1" hidden>
     <h2>Linear Classifier (SVM)</h2>
     <p class="sub">The decision boundary learns to separate two classes of points.</p>
     <div class="demo-row">
@@ -186,7 +388,7 @@
       <button class="btn-go" id="svmGo">⏸ Pause</button>
       <button class="btn-rst" onclick="svmReset()">Restart</button>
     </div>
-    <div class="info" id="svmInfo">Training…</div>
+    <div class="info" id="svmInfo" aria-live="polite">Training…</div>
     <div class="how">
       <b>What's happening?</b> Each step minimises the <i>hinge loss</i>:
       if a point is on the wrong side of the line (or within the margin),
@@ -198,7 +400,7 @@
   <!-- ════════════════════════════════════════════  
        DEMO 2 — K-Means Clustering  
        ════════════════════════════════════════════ -->
-  <div class="card" id="c2">
+  <div class="card" id="c2" role="tabpanel" aria-labelledby="tab2" hidden>
     <h2>K-Means Clustering</h2>
     <p class="sub">The algorithm groups scattered points into colour-coded clusters.</p>
     <div class="demo-row">
@@ -214,7 +416,7 @@
       <button class="btn-go" id="kmGo">▶ Step</button>
       <button class="btn-rst" onclick="kmReset()">Restart</button>
     </div>
-    <div class="info" id="kmInfo">Running…</div>
+    <div class="info" id="kmInfo" aria-live="polite">Running…</div>
     <div class="how">
       <b>What's happening?</b> K-Means alternates two steps:
       (1) <b>Assign</b> — colour each point by its nearest centroid;
@@ -227,16 +429,16 @@
   <!-- ════════════════════════════════════════════
        DEMO 3 — Vector Embeddings
        ════════════════════════════════════════════ -->
-  <div class="card" id="c3">
+  <div class="card" id="c3" role="tabpanel" aria-labelledby="tab3" hidden>
     <h2>Vector Embeddings</h2>
-    <p class="sub">Words become points in space — similar meanings land close together.</p>
+    <p class="sub">Words become points in 3-D space — similar meanings land close together.</p>
     <div class="demo-row">
       <div class="canvas-wrap">
         <canvas id="emb" width="700" height="540"></canvas>
       </div>
-      <div class="chart-wrap" style="width:300px;min-width:260px;align-items:flex-start;padding:14px;flex-direction:column;">
+      <div class="chart-wrap side-stack" style="width:300px;min-width:260px;">
         <canvas id="embBar" width="300" height="260"></canvas>
-        <div id="embMath" style="font-size:.82em;color:#34495e;line-height:1.7;margin-top:10px;"></div>
+        <div id="embMath" class="math-panel"></div>
       </div>
     </div>
     <div class="ctrl">
@@ -245,12 +447,14 @@
         <option value="1">Vehicles</option>
         <option value="2">Food</option>
       </select></label>
+      <label>Zoom <input type="range" id="embZoom" min="80" max="180" value="100"> <span id="embZoomV">1.00x</span></label>
+      <button class="btn-go" type="button" onclick="embResetView()">Reset View</button>
       <button class="btn-rst" onclick="embReset()">New Dataset</button>
     </div>
-    <div class="info" id="embInfo">Hover over a word to see distances. Click two words to compare.</div>
+    <div class="info" id="embInfo" aria-live="polite">Drag to rotate the 3-D view. Use the zoom slider or mouse wheel to zoom. Hover or tap a word to inspect it, then select two words to compare.</div>
     <div class="how">
       <b>What's happening?</b> Each word is encoded as a short vector of numbers
-      (here just 2-D for visualisation). Two words that are <i>semantically similar</i>
+      (here shown in 3-D for visualisation). Two words that are <i>semantically similar</i>
       (e.g. "cat" &amp; "dog") get vectors that point in nearly the same direction, so
       they appear close together. The <b>cosine similarity</b> measures the angle
       between two vectors: 1 = identical direction, 0 = unrelated. This is the core
@@ -261,35 +465,35 @@
   <!-- ════════════════════════════════════════════
        DEMO 4 — Tiny Transformer (Next-Word Prediction)
        ════════════════════════════════════════════ -->
-  <div class="card" id="c4">
+  <div class="card" id="c4" role="tabpanel" aria-labelledby="tab4" hidden>
     <h2>Tiny Transformer</h2>
     <p class="sub">Build a sentence, then watch a mini transformer predict the next word step by step.</p>
 
-    <p style="text-align:center;font-size:.88em;color:#7f8c8d;margin-bottom:6px;">Click words to build your prompt:</p>
+    <p class="note-muted">Click words to build your prompt:</p>
     <div class="tf-input" id="tfWords"></div>
-    <div class="tf-prompt" id="tfPrompt"><span style="color:#bdc3c7">your prompt appears here…</span></div>
+    <div class="tf-prompt" id="tfPrompt"><span class="placeholder">your prompt appears here…</span></div>
 
     <div class="ctrl" style="margin-top:4px;margin-bottom:8px;">
       <button class="btn-go" id="tfGo">▶ Predict Next Word</button>
       <button class="btn-rst" onclick="tfReset()">Clear</button>
     </div>
-    <div class="info" id="tfInfo"></div>
+    <div class="info" id="tfInfo" aria-live="polite"></div>
 
     <div class="tf-pipeline" id="tfPipe" style="display:none;">
       <div class="tf-stage">
         <h4>1 · Embeddings</h4>
         <canvas id="tfEmb" width="220" height="160"></canvas>
-        <p style="font-size:.76em;color:#7f8c8d;margin:4px 0 0">Each word → a vector of numbers</p>
+        <p class="microcopy">Each word → a vector of numbers</p>
       </div>
       <div class="tf-stage">
         <h4>2 · Attention</h4>
         <canvas id="tfAtt" width="220" height="160"></canvas>
-        <p style="font-size:.76em;color:#7f8c8d;margin:4px 0 0">How much each word attends to every other</p>
+        <p class="microcopy">How much each word attends to every other</p>
       </div>
       <div class="tf-stage">
         <h4>3 · Prediction</h4>
         <canvas id="tfPred" width="220" height="160"></canvas>
-        <p style="font-size:.76em;color:#7f8c8d;margin:4px 0 0">Softmax probabilities for next word</p>
+        <p class="microcopy">Softmax probabilities for next word</p>
       </div>
     </div>
 
@@ -309,7 +513,7 @@
   <!-- ════════════════════════════════════════════
        DEMO 5 — Neural Network (XOR)
        ════════════════════════════════════════════ -->
-  <div class="card" id="c5">
+  <div class="card" id="c5" role="tabpanel" aria-labelledby="tab5" hidden>
     <h2>Neural Network</h2>
     <p class="sub">A tiny 2→4→1 network learns the XOR pattern — watch neurons light up.</p>
     <div class="demo-row">
@@ -325,7 +529,7 @@
       <button class="btn-go" id="nnGo">⏸ Pause</button>
       <button class="btn-rst" onclick="nnReset()">Restart</button>
     </div>
-    <div class="info" id="nnInfo">Training…</div>
+    <div class="info" id="nnInfo" aria-live="polite">Training…</div>
     <div class="how">
       <b>What's happening?</b> XOR is not linearly separable — a single line can't solve it.
       The hidden layer creates new features that bend the space so the output neuron can
@@ -336,7 +540,7 @@
   <!-- ════════════════════════════════════════════
        DEMO 6 — Overfitting
        ════════════════════════════════════════════ -->
-  <div class="card" id="c6">
+  <div class="card" id="c6" role="tabpanel" aria-labelledby="tab6" hidden>
     <h2>Overfitting</h2>
     <p class="sub">Drag the slider to increase polynomial degree and watch the model overfit.</p>
     <div class="demo-row">
@@ -351,7 +555,7 @@
       <label>Degree <input type="range" id="ofDeg" min="1" max="15" value="1"> <span id="ofDegV">1</span></label>
       <button class="btn-rst" onclick="ofReset()">New Data</button>
     </div>
-    <div class="info" id="ofInfo"></div>
+    <div class="info" id="ofInfo" aria-live="polite"></div>
     <div class="how">
       <b>What's happening?</b> We fit a polynomial of increasing degree to noisy data.
       Low degree = underfitting (too simple). High degree = overfitting (memorises noise,
@@ -363,16 +567,16 @@
   <!-- ════════════════════════════════════════════
        DEMO 7 — Convolution (CNN filter)
        ════════════════════════════════════════════ -->
-  <div class="card" id="c7">
+  <div class="card" id="c7" role="tabpanel" aria-labelledby="tab7" hidden>
     <h2>Convolution</h2>
     <p class="sub">Apply a filter kernel to an image and see the output feature map.</p>
     <div class="demo-row">
       <div class="canvas-wrap">
         <canvas id="cv" width="600" height="460"></canvas>
       </div>
-      <div class="chart-wrap" style="flex-direction:column;align-items:center;padding:14px;">
+      <div class="chart-wrap side-stack centered">
         <canvas id="cvKern" width="260" height="140"></canvas>
-        <div id="cvMath" style="font-size:.82em;color:#34495e;line-height:1.65;margin-top:8px;"></div>
+        <div id="cvMath" class="math-panel"></div>
       </div>
     </div>
     <div class="ctrl">
@@ -389,7 +593,7 @@
       </select></label>
       <button class="btn-rst" onclick="cvRedraw()">Apply</button>
     </div>
-    <div class="info" id="cvInfo"></div>
+    <div class="info" id="cvInfo" aria-live="polite"></div>
     <div class="how">
       <b>What's happening?</b> A 3×3 kernel slides across the input image. At each
       position, we multiply element-wise and sum — that's the convolution. Different
@@ -401,7 +605,7 @@
   <!-- ════════════════════════════════════════════
        DEMO 8 — PCA
        ════════════════════════════════════════════ -->
-  <div class="card" id="c8">
+  <div class="card" id="c8" role="tabpanel" aria-labelledby="tab8" hidden>
     <h2>PCA</h2>
     <p class="sub">See how principal components capture the directions of maximum variance.</p>
     <div class="demo-row">
@@ -416,7 +620,7 @@
       <label>Show PC2 <input type="checkbox" id="pcaPC2" checked></label>
       <button class="btn-rst" onclick="pcaReset()">New Data</button>
     </div>
-    <div class="info" id="pcaInfo"></div>
+    <div class="info" id="pcaInfo" aria-live="polite"></div>
     <div class="how">
       <b>What's happening?</b> PCA finds the axes (principal components) along which
       the data varies the most. PC1 captures the most variance; PC2 the next most.
@@ -428,7 +632,7 @@
   <!-- ════════════════════════════════════════════
        DEMO 9 — Reinforcement Learning (Grid World)
        ════════════════════════════════════════════ -->
-  <div class="card" id="c9">
+  <div class="card" id="c9" role="tabpanel" aria-labelledby="tab9" hidden>
     <h2>RL Agent</h2>
     <p class="sub">An agent learns to navigate a grid world to reach the goal.</p>
     <div class="demo-row">
@@ -444,7 +648,7 @@
       <button class="btn-go" id="rlGo">⏸ Pause</button>
       <button class="btn-rst" onclick="rlReset()">Restart</button>
     </div>
-    <div class="info" id="rlInfo">Training…</div>
+    <div class="info" id="rlInfo" aria-live="polite">Training…</div>
     <div class="how">
       <b>What's happening?</b> The agent uses <b>Q-learning</b>: it maintains a
       value for each (state, action) pair. When it reaches the goal (+1 reward)
@@ -456,7 +660,7 @@
   <!-- ════════════════════════════════════════════
        DEMO 10 — Decision Tree
        ════════════════════════════════════════════ -->
-  <div class="card" id="c10">
+  <div class="card" id="c10" role="tabpanel" aria-labelledby="tab10" hidden>
     <h2>Decision Tree</h2>
     <p class="sub">Watch a tree recursively split the feature space to classify points.</p>
     <div class="demo-row">
@@ -471,7 +675,7 @@
       <label>Max depth <input type="range" id="dtDepth" min="1" max="6" value="3"> <span id="dtDepthV">3</span></label>
       <button class="btn-rst" onclick="dtReset()">New Data</button>
     </div>
-    <div class="info" id="dtInfo"></div>
+    <div class="info" id="dtInfo" aria-live="polite"></div>
     <div class="how">
       <b>What's happening?</b> At each node the tree picks the feature and threshold
       that best separates the classes (maximum information gain / Gini reduction).
@@ -483,16 +687,16 @@
   <!-- ════════════════════════════════════════════
        DEMO 11 — Backpropagation
        ════════════════════════════════════════════ -->
-  <div class="card" id="c11">
+  <div class="card" id="c11" role="tabpanel" aria-labelledby="tab11" hidden>
     <h2>Backpropagation</h2>
     <p class="sub">Watch gradients flow backward through a network using the chain rule.</p>
     <div class="demo-row">
       <div class="canvas-wrap">
         <canvas id="bp" width="700" height="460"></canvas>
       </div>
-      <div class="chart-wrap" style="flex-direction:column;align-items:flex-start;padding:14px;">
+      <div class="chart-wrap side-stack">
         <canvas id="bpChart" width="260" height="200"></canvas>
-        <div id="bpMath" style="font-size:.8em;color:#34495e;line-height:1.7;margin-top:8px;font-family:monospace;"></div>
+        <div id="bpMath" class="math-panel mono"></div>
       </div>
     </div>
     <div class="ctrl">
@@ -500,7 +704,7 @@
       <button class="btn-go" id="bpAuto">⏩ Auto-Train</button>
       <button class="btn-rst" onclick="bpReset()">Restart</button>
     </div>
-    <div class="info" id="bpInfo">Press ▶ to run one forward+backward pass.</div>
+    <div class="info" id="bpInfo" aria-live="polite">Press ▶ to run one forward+backward pass.</div>
     <div class="how">
       <b>What's happening?</b> Backprop computes ∂Loss/∂w for every weight via the
       <b>chain rule</b>. Green arrows = forward pass (compute output); red arrows =
@@ -513,10 +717,253 @@
 
 <script>
 /* ═══════════════════  Tabs  ═══════════════════ */
-function show(i){
-  document.querySelectorAll('.card').forEach((c,j)=>{c.classList.toggle('on',j===i)});
-  document.querySelectorAll('.tabs button').forEach((b,j)=>{b.classList.toggle('on',j===i)});
+const demoHashes = [
+  'gradient-descent',
+  'classify-svm',
+  'k-means',
+  'embeddings',
+  'transformer',
+  'neural-net',
+  'overfitting',
+  'convolution',
+  'pca',
+  'rl-agent',
+  'decision-tree',
+  'backprop'
+];
+const lessonContent = [
+  {
+    heading: 'Click to learn why gradient descent feels so intuitive',
+    story: 'Imagine you are blindfolded on a foggy hillside holding a marble. You cannot see the valley, but you can feel which way the ground slopes under your feet. So you keep taking a small step downhill. Gradient descent does the same with a model: it checks which direction makes the error shrink, then nudges the parameters that way until it settles near the bottom.',
+    facts: [
+      ['Main idea', 'Follow the steepest downhill direction.'],
+      ['Why step size matters', 'Tiny steps are safe; giant ones can bounce past the target.'],
+      ['What the minimum means', 'The model has found parameters with low error.']
+    ]
+  },
+  {
+    heading: 'Click to learn how a linear classifier thinks',
+    story: 'Picture a teacher laying down a piece of tape across a desk to separate blue beads from red beads. If a bead lands on the wrong side, the teacher slides the tape a little. Over time the tape finds a position that gives each group as much breathing room as possible. That tape is the decision boundary; the breathing room is the margin.',
+    facts: [
+      ['Main idea', 'Draw a line that separates two groups.'],
+      ['What training does', 'Misclassified points push the line into a better place.'],
+      ['Limit', 'If the groups twist around each other, a straight line is not enough.']
+    ]
+  },
+  {
+    heading: 'Click to learn why k-means keeps regrouping points',
+    story: 'Think of throwing a few empty baskets onto a floor covered with colored marbles. First, every marble rolls toward the nearest basket. Then each basket gets dragged to the center of the marbles it collected. Repeat that a few times and the baskets settle into natural gathering spots. That repeated assign-and-move rhythm is k-means.',
+    facts: [
+      ['Main idea', 'Group points by nearest center.'],
+      ['Why it repeats', 'Assignments change centers, and new centers change assignments.'],
+      ['What K controls', 'How many groups you force the data into.']
+    ]
+  },
+  {
+    heading: 'Click to learn what an embedding really is',
+    story: 'Imagine a librarian who does not describe books with words, but by placing them on a giant map. Books with similar themes end up near each other, even if their titles look unrelated. Embeddings do that for words, images, and other data: they turn meaning into coordinates so distance becomes a rough stand-in for similarity.',
+    facts: [
+      ['Main idea', 'Meaning becomes position in a vector space.'],
+      ['Why closeness matters', 'Nearby items often behave similarly to the model.'],
+      ['Common measure', 'Cosine similarity checks whether two vectors point in similar directions.']
+    ]
+  },
+  {
+    heading: 'Click to learn the transformer as a conversation game',
+    story: 'Picture a round table where every word in a sentence can lean over and ask, "Who here matters most to me right now?" The word "sat" listens for a subject, and the word "on" looks for a place. Attention is that act of listening selectively. A transformer stacks many rounds of this, so the next word is guessed from a rich web of relationships instead of just the last token alone.',
+    facts: [
+      ['Main idea', 'Each token weighs which earlier tokens matter most.'],
+      ['Why attention helps', 'Important context gets amplified instead of averaged away.'],
+      ['Output', 'The model turns context into probabilities for the next word.']
+    ]
+  },
+  {
+    heading: 'Click to learn why a neural net uses hidden layers',
+    story: 'Suppose a puzzle has two switches and a lamp that should light only when exactly one switch is on. A single rule is too blunt, so you hire a small team of assistants. One watches for the top pattern, another for the bottom pattern, and together they hand the final judge a simpler problem. Hidden layers work like those assistants: they build better intermediate features before the final decision.',
+    facts: [
+      ['Main idea', 'Hidden units create useful intermediate patterns.'],
+      ['Why XOR matters', 'It is a classic example a straight-line model cannot solve.'],
+      ['What weights do', 'They control which patterns each neuron notices.']
+    ]
+  },
+  {
+    heading: 'Click to learn what overfitting feels like',
+    story: 'Imagine a student studying for an exam by memorizing every homework typo instead of understanding the subject. They score well on practice questions they have seen before, but freeze when the wording changes. That is overfitting: the model clings to noise and quirks in the training data, instead of learning the broader pattern that transfers to new examples.',
+    facts: [
+      ['Main idea', 'A model can memorize details without learning the true rule.'],
+      ['How it shows up', 'Training error keeps dropping while test error starts rising.'],
+      ['Typical fix', 'Use simpler models, more data, or regularization.']
+    ]
+  },
+  {
+    heading: 'Click to learn convolution through a moving stencil',
+    story: 'Think of holding a tiny stencil over an image and sliding it one square at a time. At each stop, you compare the stencil pattern to the local pixels and write down how strongly they match. One stencil loves edges, another smooths noise, another sharpens details. Convolution is that scanning process, and CNNs learn which stencils are useful instead of hand-picking them.',
+    facts: [
+      ['Main idea', 'A small filter scans across the image.'],
+      ['What the output means', 'Bright spots show where the filter found a strong match.'],
+      ['Why it scales', 'The same filter can detect a pattern anywhere in the image.']
+    ]
+  },
+  {
+    heading: 'Click to learn PCA as finding the best camera angle',
+    story: 'Imagine you are photographing a cloud of dots in 3D and want the flattest, most informative picture. If you choose the wrong angle, the cloud looks cramped and messy. Rotate the camera to the right view and the spread becomes obvious. PCA finds those best viewing directions automatically: first the axis with the most variation, then the next best leftover direction.',
+    facts: [
+      ['Main idea', 'Rotate the axes to line up with the strongest variation.'],
+      ['Why PC1 matters', 'It captures the largest share of the information.'],
+      ['Use case', 'Compress data while keeping the most important structure.']
+    ]
+  },
+  {
+    heading: 'Click to learn reinforcement learning like training a pet',
+    story: 'Picture teaching a dog to reach a treat at the end of a maze. You do not lecture it with a map; you reward good moves and discourage bad ones. At first the dog wanders. Over time it starts to remember which turns led closer to the treat. Reinforcement learning works the same way: trial, reward, memory, and gradually better choices.',
+    facts: [
+      ['Main idea', 'Actions get better through reward and penalty.'],
+      ['What Q-values mean', 'They estimate how good an action is from a state.'],
+      ['Why exploration matters', 'The agent must try uncertain moves before it can trust them.']
+    ]
+  },
+  {
+    heading: 'Click to learn how a decision tree asks questions',
+    story: 'Imagine a game of twenty questions where each question tries to split the possibilities as cleanly as possible. "Is it taller than this?" "Is it to the left of that?" After a few smart questions, the answer becomes obvious. A decision tree behaves that way: each branch asks a simple yes-or-no question that makes the remaining data easier to classify.',
+    facts: [
+      ['Main idea', 'Ask simple split questions until each region is mostly one class.'],
+      ['Why depth matters', 'More depth means more nuanced rules, but also more risk of memorizing noise.'],
+      ['Strength', 'Trees are easy to read because every prediction is a path of questions.']
+    ]
+  },
+  {
+    heading: 'Click to learn backprop as blame assignment',
+    story: 'Suppose a restaurant sends out a bad dish. The head chef needs to know how much blame belongs to the sauce, the timing, and the seasoning so the next dish improves. Backpropagation is that blame assignment for neural nets. It starts at the final error, then traces backward through every connection to work out which weights contributed most and how they should change.',
+    facts: [
+      ['Main idea', 'Send the error backward so each weight gets a correction signal.'],
+      ['Why the chain rule matters', 'It links small local effects into one end-to-end gradient.'],
+      ['Result', 'Weights update in the direction that reduces future error.']
+    ]
+  }
+];
+const demoControllers = new Map();
+let activeDemoIndex = 0;
+
+function isDemoVisible(index){
+  return activeDemoIndex === index && !document.hidden;
 }
+
+function getHashForIndex(index){
+  return `#${demoHashes[index] || `section-${index + 1}`}`;
+}
+
+function getIndexFromHash(hash){
+  const slug = hash.replace(/^#/, '').trim().toLowerCase();
+  if(!slug) return 0;
+  const slugIndex = demoHashes.indexOf(slug);
+  if(slugIndex >= 0) return slugIndex;
+  const numericMatch = slug.match(/^demo-(\d+)$/);
+  if(!numericMatch) return 0;
+  const numericIndex = parseInt(numericMatch[1], 10);
+  if(Number.isNaN(numericIndex)) return 0;
+  return Math.min(Math.max(numericIndex, 0), demoHashes.length - 1);
+}
+
+function registerDemoController(index, controller){
+  demoControllers.set(index, controller);
+  if(isDemoVisible(index) && controller.onShow) controller.onShow();
+}
+
+function show(i){
+  const previousIndex = activeDemoIndex;
+  activeDemoIndex = i;
+  const cards = document.querySelectorAll('.card');
+  const tabs = document.querySelectorAll('.tabs button');
+  cards.forEach((c,j)=>{
+    const active = j===i;
+    c.classList.toggle('on',active);
+    c.hidden = !active;
+  });
+  tabs.forEach((b,j)=>{
+    const active = j===i;
+    b.classList.toggle('on',active);
+    b.setAttribute('aria-selected', String(active));
+    b.tabIndex = active ? 0 : -1;
+  });
+  if(previousIndex !== i){
+    const previousController = demoControllers.get(previousIndex);
+    if(previousController && previousController.onHide) previousController.onHide();
+    const nextController = demoControllers.get(i);
+    if(nextController && nextController.onShow && !document.hidden) nextController.onShow();
+  }
+  if (history.replaceState) history.replaceState(null, '', getHashForIndex(i));
+}
+
+function initTabs(){
+  const tabs = Array.from(document.querySelectorAll('.tabs button'));
+  const initialIndex = getIndexFromHash(window.location.hash);
+  show(initialIndex);
+
+  tabs.forEach((tab, index)=>{
+    tab.addEventListener('keydown', event => {
+      let nextIndex = null;
+      if(event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+      if(event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+      if(event.key === 'Home') nextIndex = 0;
+      if(event.key === 'End') nextIndex = tabs.length - 1;
+      if(nextIndex === null) return;
+      event.preventDefault();
+      show(nextIndex);
+      tabs[nextIndex].focus();
+    });
+  });
+
+  window.addEventListener('hashchange', ()=>{
+    show(getIndexFromHash(window.location.hash));
+  });
+
+  document.addEventListener('visibilitychange', ()=>{
+    const controller = demoControllers.get(activeDemoIndex);
+    if(!controller) return;
+    if(document.hidden){
+      if(controller.onHide) controller.onHide();
+      return;
+    }
+    if(controller.onShow) controller.onShow();
+  });
+}
+
+function renderCrashCourses(){
+  document.querySelectorAll('.card').forEach((card, index)=>{
+    const lesson = lessonContent[index];
+    if(!lesson || card.querySelector('.learn-panel')) return;
+
+    const factsMarkup = lesson.facts.map(([label, text]) => `
+      <div class="learn-fact">
+        <span class="learn-fact-label">${label}</span>
+        <div class="learn-fact-text">${text}</div>
+      </div>
+    `).join('');
+
+    const details = document.createElement('details');
+    details.className = 'learn-panel';
+    details.innerHTML = `
+      <summary>
+        <span class="learn-title">
+          <span class="learn-kicker">Story mode</span>
+          <span class="learn-heading">${lesson.heading}</span>
+        </span>
+        <span class="learn-arrow" aria-hidden="true">›</span>
+      </summary>
+      <div class="learn-body">
+        <p class="learn-story">${lesson.story}</p>
+        <div class="learn-facts">${factsMarkup}</div>
+      </div>
+    `;
+
+    const howBox = card.querySelector('.how');
+    if(howBox) card.insertBefore(details, howBox);
+    else card.appendChild(details);
+  });
+}
+
+initTabs();
+renderCrashCourses();
 
 /* ═══════════════════  Helpers  ═══════════════════ */
 const PALETTE = ['#3498db','#e74c3c','#2ecc71','#f39c12','#9b59b6'];
@@ -610,6 +1057,7 @@ function drawChart(canvas, data, label, colour, yLabel){
   const W=C.width, H=C.height;
   let ball=null, trail=[], running=false, raf=null;
   let lossHistory=[];
+  let shouldResumeWhenVisible=true;
 
   // Auto-place ball at a random corner
   function autoInit(){
@@ -689,9 +1137,30 @@ function drawChart(canvas, data, label, colour, yLabel){
   document.getElementById('gdGo').onclick=function(){
     if(!ball) return;
     running=!running;
+    shouldResumeWhenVisible=running;
     this.textContent=running?'⏸ Pause':'▶ Resume';
     if(running) tick();
   };
+
+  function pauseForHide(){
+    if(raf) cancelAnimationFrame(raf);
+    raf=null;
+    if(running){
+      running=false;
+      if(shouldResumeWhenVisible) document.getElementById('gdGo').textContent='▶ Resume';
+    }
+  }
+
+  function resumeForShow(){
+    if(!shouldResumeWhenVisible || running) return;
+    if(!ball){
+      autoInit();
+      return;
+    }
+    running=true;
+    document.getElementById('gdGo').textContent='⏸ Pause';
+    tick();
+  }
 
   function tick(){
     if(!running||!ball) return;
@@ -709,6 +1178,7 @@ function drawChart(canvas, data, label, colour, yLabel){
       `Step ${trail.length-1}  ·  (${ball[0].toFixed(3)}, ${ball[1].toFixed(3)})  ·  Loss = ${loss.toFixed(6)}`;
     draw();
     if(loss<1e-8){running=false;document.getElementById('gdGo').textContent='▶ Start';
+      shouldResumeWhenVisible=false;
       document.getElementById('gdInfo').textContent+='  ✓ Converged!'; return;}
     raf=requestAnimationFrame(()=>setTimeout(tick,40));
   }
@@ -716,12 +1186,14 @@ function drawChart(canvas, data, label, colour, yLabel){
   window.gdReset=function(){
     ball=null; trail=[]; running=false; lossHistory=[];
     if(raf) cancelAnimationFrame(raf);
+    raf=null;
+    shouldResumeWhenVisible=true;
     draw();
-    autoInit();
+    if(isDemoVisible(0)) autoInit();
+    else document.getElementById('gdGo').textContent='▶ Start';
   };
 
-  // Auto-start on load
-  autoInit();
+  registerDemoController(0, { onShow: resumeForShow, onHide: pauseForHide });
 })();
 
 /* ═══════════════════════════════════════════════════
@@ -732,6 +1204,7 @@ function drawChart(canvas, data, label, colour, yLabel){
   const W=C.width, H=C.height;
   let pts=[], w=[.3,-.2], b=0, running=false, raf=null, step=0;
   let svmLossHistory=[];
+  let shouldResumeWhenVisible=true;
 
   // Generate random 2-class dataset
   function genData(){
@@ -800,9 +1273,26 @@ function drawChart(canvas, data, label, colour, yLabel){
 
   document.getElementById('svmGo').onclick=function(){
     running=!running;
+    shouldResumeWhenVisible=running;
     this.textContent=running?'⏸ Pause':'▶ Resume';
     if(running) tick();
   };
+
+  function pauseForHide(){
+    if(raf) cancelAnimationFrame(raf);
+    raf=null;
+    if(running){
+      running=false;
+      if(shouldResumeWhenVisible) document.getElementById('svmGo').textContent='▶ Resume';
+    }
+  }
+
+  function resumeForShow(){
+    if(!shouldResumeWhenVisible || running) return;
+    running=true;
+    document.getElementById('svmGo').textContent='⏸ Pause';
+    tick();
+  }
 
   function tick(){
     if(!running) return;
@@ -830,7 +1320,11 @@ function drawChart(canvas, data, label, colour, yLabel){
 
   window.svmReset=function(){
     running=false; if(raf) cancelAnimationFrame(raf);
-    genData(); draw(); autoTrainSVM();
+    raf=null;
+    shouldResumeWhenVisible=true;
+    genData(); draw();
+    if(isDemoVisible(1)) autoTrainSVM();
+    else document.getElementById('svmGo').textContent='▶ Resume';
   };
 
   function autoTrainSVM(){
@@ -839,8 +1333,8 @@ function drawChart(canvas, data, label, colour, yLabel){
     step=0; tick();
   }
 
-  // Auto-start on load
-  genData(); draw(); autoTrainSVM();
+  genData(); draw();
+  registerDemoController(1, { onShow: resumeForShow, onHide: pauseForHide });
 })();
 
 /* ═══════════════════════════════════════════════════
@@ -851,6 +1345,7 @@ function drawChart(canvas, data, label, colour, yLabel){
   const W=C.width, H=C.height;
   let pts=[], cents=[], stepN=0, running=false, raf=null;
   let inertiaHistory=[];
+  let hasConverged=false;
 
   // Generate random blob data
   function genBlobs(){
@@ -953,6 +1448,7 @@ function drawChart(canvas, data, label, colour, yLabel){
     inertiaHistory.push(inertia);
     drawChart(document.getElementById('kmChart'), inertiaHistory, 'Inertia vs Step', '#27ae60', 'WCSS');
     stepN++;
+    hasConverged=!changed;
     draw();
     document.getElementById('kmInfo').textContent=`Step ${stepN}` + (changed?'':' — converged ✓');
     return changed;
@@ -965,6 +1461,7 @@ function drawChart(canvas, data, label, colour, yLabel){
   };
 
   function autoRunKM(){
+    if(hasConverged) return;
     if(cents.length===0) initCents();
     running=true;
     function loop(){
@@ -976,13 +1473,27 @@ function drawChart(canvas, data, label, colour, yLabel){
     loop();
   }
 
+  function pauseForHide(){
+    if(raf) cancelAnimationFrame(raf);
+    raf=null;
+    running=false;
+  }
+
+  function resumeForShow(){
+    if(running || hasConverged) return;
+    autoRunKM();
+  }
+
   window.kmReset=function(){
     running=false; if(raf) cancelAnimationFrame(raf);
-    genBlobs(); draw(); autoRunKM();
+    raf=null;
+    hasConverged=false;
+    genBlobs(); draw();
+    if(isDemoVisible(2)) autoRunKM();
   };
 
-  // Auto-start on load
-  genBlobs(); draw(); autoRunKM();
+  genBlobs(); draw();
+  registerDemoController(2, { onShow: resumeForShow, onHide: pauseForHide });
 })();
 
 /* ═══════════════════════════════════════════════════
@@ -993,131 +1504,270 @@ function drawChart(canvas, data, label, colour, yLabel){
   const W=C.width, H=C.height;
   const pad={t:28,r:20,b:28,l:28};
   const cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+  const center=[pad.l+cw/2, pad.t+ch/2];
+  const baseScale=Math.min(cw,ch)*0.48;
+  const axisLen=1.42;
+  const projectCache=[];
+  const zoomInput=document.getElementById('embZoom');
+  const zoomValue=document.getElementById('embZoomV');
+  let rotY=-0.7, rotX=0.45;
+  let zoom=1;
+  let dragging=false, dragMoved=false, pointerId=null, lastPointer=null;
 
-  /* ── Pre-built toy datasets (label → [x,y] in ~[-1,1]) ── */
+  /* ── Pre-built toy datasets (label → [x,y,z] in ~[-1,1]) ── */
   const DATASETS=[
     { title:'Animals', items:[
-      {w:'cat',     v:[0.72, 0.68], col:'#9b59b6'},
-      {w:'dog',     v:[0.65, 0.60], col:'#9b59b6'},
-      {w:'kitten',  v:[0.78, 0.73], col:'#9b59b6'},
-      {w:'puppy',   v:[0.60, 0.55], col:'#9b59b6'},
-      {w:'fish',    v:[-0.20, 0.85], col:'#3498db'},
-      {w:'shark',   v:[-0.35, 0.75], col:'#3498db'},
-      {w:'whale',   v:[-0.50, 0.60], col:'#3498db'},
-      {w:'eagle',   v:[0.15,-0.70], col:'#e67e22'},
-      {w:'sparrow', v:[0.25,-0.60], col:'#e67e22'},
-      {w:'parrot',  v:[0.35,-0.50], col:'#e67e22'},
-      {w:'snake',   v:[-0.60,-0.40], col:'#27ae60'},
-      {w:'lizard',  v:[-0.55,-0.30], col:'#27ae60'},
+      {w:'cat',     v:[0.72, 0.68, 0.45], col:'#9b59b6'},
+      {w:'dog',     v:[0.65, 0.60, 0.38], col:'#9b59b6'},
+      {w:'kitten',  v:[0.78, 0.73, 0.58], col:'#9b59b6'},
+      {w:'puppy',   v:[0.60, 0.55, 0.52], col:'#9b59b6'},
+      {w:'fish',    v:[-0.20, 0.85, -0.42], col:'#3498db'},
+      {w:'shark',   v:[-0.35, 0.75, -0.60], col:'#3498db'},
+      {w:'whale',   v:[-0.50, 0.60, -0.55], col:'#3498db'},
+      {w:'eagle',   v:[0.15,-0.70, 0.62], col:'#e67e22'},
+      {w:'sparrow', v:[0.25,-0.60, 0.72], col:'#e67e22'},
+      {w:'parrot',  v:[0.35,-0.50, 0.54], col:'#e67e22'},
+      {w:'snake',   v:[-0.60,-0.40, -0.12], col:'#27ae60'},
+      {w:'lizard',  v:[-0.55,-0.30, 0.04], col:'#27ae60'},
     ]},
     { title:'Vehicles', items:[
-      {w:'car',        v:[0.70, 0.30], col:'#e74c3c'},
-      {w:'truck',      v:[0.55, 0.40], col:'#e74c3c'},
-      {w:'bus',        v:[0.50, 0.50], col:'#e74c3c'},
-      {w:'motorcycle', v:[0.80, 0.15], col:'#e74c3c'},
-      {w:'bicycle',    v:[0.75,-0.10], col:'#f39c12'},
-      {w:'skateboard', v:[0.65,-0.25], col:'#f39c12'},
-      {w:'boat',       v:[-0.40, 0.70], col:'#3498db'},
-      {w:'ship',       v:[-0.55, 0.65], col:'#3498db'},
-      {w:'canoe',      v:[-0.30, 0.60], col:'#3498db'},
-      {w:'airplane',   v:[-0.20,-0.75], col:'#9b59b6'},
-      {w:'helicopter', v:[-0.10,-0.60], col:'#9b59b6'},
-      {w:'rocket',     v:[-0.40,-0.80], col:'#9b59b6'},
+      {w:'car',        v:[0.70, 0.30, 0.10], col:'#e74c3c'},
+      {w:'truck',      v:[0.55, 0.40, -0.15], col:'#e74c3c'},
+      {w:'bus',        v:[0.50, 0.50, -0.28], col:'#e74c3c'},
+      {w:'motorcycle', v:[0.80, 0.15, 0.32], col:'#e74c3c'},
+      {w:'bicycle',    v:[0.75,-0.10, 0.48], col:'#f39c12'},
+      {w:'skateboard', v:[0.65,-0.25, 0.64], col:'#f39c12'},
+      {w:'boat',       v:[-0.40, 0.70, -0.48], col:'#3498db'},
+      {w:'ship',       v:[-0.55, 0.65, -0.58], col:'#3498db'},
+      {w:'canoe',      v:[-0.30, 0.60, -0.36], col:'#3498db'},
+      {w:'airplane',   v:[-0.20,-0.75, 0.72], col:'#9b59b6'},
+      {w:'helicopter', v:[-0.10,-0.60, 0.56], col:'#9b59b6'},
+      {w:'rocket',     v:[-0.40,-0.80, 0.90], col:'#9b59b6'},
     ]},
     { title:'Food', items:[
-      {w:'apple',   v:[0.70, 0.55], col:'#27ae60'},
-      {w:'banana',  v:[0.75, 0.45], col:'#27ae60'},
-      {w:'orange',  v:[0.65, 0.60], col:'#27ae60'},
-      {w:'grape',   v:[0.60, 0.50], col:'#27ae60'},
-      {w:'steak',   v:[-0.60, 0.50], col:'#e74c3c'},
-      {w:'chicken', v:[-0.50, 0.55], col:'#e74c3c'},
-      {w:'bacon',   v:[-0.65, 0.40], col:'#e74c3c'},
-      {w:'pizza',   v:[-0.10,-0.60], col:'#e67e22'},
-      {w:'burger',  v:[-0.25,-0.55], col:'#e67e22'},
-      {w:'pasta',   v:[0.05,-0.65], col:'#e67e22'},
-      {w:'cake',    v:[0.50,-0.40], col:'#9b59b6'},
-      {w:'cookie',  v:[0.55,-0.35], col:'#9b59b6'},
+      {w:'apple',   v:[0.70, 0.55, 0.30], col:'#27ae60'},
+      {w:'banana',  v:[0.75, 0.45, 0.20], col:'#27ae60'},
+      {w:'orange',  v:[0.65, 0.60, 0.14], col:'#27ae60'},
+      {w:'grape',   v:[0.60, 0.50, 0.42], col:'#27ae60'},
+      {w:'steak',   v:[-0.60, 0.50, -0.24], col:'#e74c3c'},
+      {w:'chicken', v:[-0.50, 0.55, -0.12], col:'#e74c3c'},
+      {w:'bacon',   v:[-0.65, 0.40, -0.36], col:'#e74c3c'},
+      {w:'pizza',   v:[-0.10,-0.60, 0.48], col:'#e67e22'},
+      {w:'burger',  v:[-0.25,-0.55, 0.36], col:'#e67e22'},
+      {w:'pasta',   v:[0.05,-0.65, 0.58], col:'#e67e22'},
+      {w:'cake',    v:[0.50,-0.40, 0.82], col:'#9b59b6'},
+      {w:'cookie',  v:[0.55,-0.35, 0.76], col:'#9b59b6'},
     ]}
   ];
 
   let data=[], hovered=-1, selected=[];
+  let autoSpin=0;
 
   function load(idx){
     data=DATASETS[idx].items.map(d=>({...d}));
     // add a little jitter so it feels alive
-    data.forEach(d=>{ d.v=[d.v[0]+(Math.random()-.5)*.08, d.v[1]+(Math.random()-.5)*.08]; });
+    data.forEach(d=>{
+      d.v=[
+        d.v[0]+(Math.random()-.5)*.08,
+        d.v[1]+(Math.random()-.5)*.08,
+        d.v[2]+(Math.random()-.5)*.08
+      ];
+    });
     hovered=-1; selected=[];
+    resetView();
     draw(); updateSide();
   }
 
-  function toC(v){ return [pad.l+(v[0]+1)/2*cw, pad.t+(1-(v[1]+1)/2)*ch]; }
+  function rotateVec(v){
+    const cosY=Math.cos(rotY), sinY=Math.sin(rotY);
+    const cosX=Math.cos(rotX), sinX=Math.sin(rotX);
+    const x1=v[0]*cosY + v[2]*sinY;
+    const z1=-v[0]*sinY + v[2]*cosY;
+    const y2=v[1]*cosX - z1*sinX;
+    const z2=v[1]*sinX + z1*cosX;
+    return [x1,y2,z2];
+  }
+
+  function toC(v){
+    const [rx,ry,rz]=rotateVec(v);
+    const depth=1.85/(2.8-rz);
+    const scale=baseScale*zoom;
+    return {
+      x:center[0]+rx*scale*depth,
+      y:center[1]-ry*scale*depth,
+      depth,
+      z:rz
+    };
+  }
+
+  function axisPoint(x,y,z){
+    const p=toC([x,y,z]);
+    return [p.x,p.y,p.depth,p.z];
+  }
 
   function cosine(a,b){
-    const dot=a[0]*b[0]+a[1]*b[1];
-    const na=Math.sqrt(a[0]*a[0]+a[1]*a[1]);
-    const nb=Math.sqrt(b[0]*b[0]+b[1]*b[1]);
+    const dot=a.reduce((sum,val,i)=>sum+val*b[i],0);
+    const na=Math.sqrt(a.reduce((sum,val)=>sum+val*val,0));
+    const nb=Math.sqrt(b.reduce((sum,val)=>sum+val*val,0));
     return na&&nb? dot/(na*nb) : 0;
   }
-  function eucl(a,b){ return Math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2); }
+  function eucl(a,b){ return Math.sqrt(a.reduce((sum,val,i)=>sum+(val-b[i])**2,0)); }
+
+  function drawAxis(label, start, end, colour){
+    X.beginPath();
+    X.moveTo(start[0],start[1]);
+    X.lineTo(end[0],end[1]);
+    X.strokeStyle=colour;
+    X.lineWidth=2;
+    X.stroke();
+    X.fillStyle=colour;
+    X.font='bold 12px sans-serif';
+    X.textAlign='center';
+    X.textBaseline='middle';
+    X.fillText(label, end[0], end[1]-10);
+  }
+
+  function drawSceneAura(){
+    const s=baseScale*zoom;
+    const glow=X.createRadialGradient(center[0],center[1],10,center[0],center[1],s*2.8);
+    glow.addColorStop(0,'rgba(52,152,219,.10)');
+    glow.addColorStop(0.45,'rgba(155,89,182,.07)');
+    glow.addColorStop(1,'rgba(255,255,255,0)');
+    X.fillStyle=glow;
+    X.beginPath();
+    X.arc(center[0],center[1],s*2.8,0,Math.PI*2);
+    X.fill();
+
+    X.strokeStyle='rgba(52,152,219,.14)';
+    X.lineWidth=1;
+    X.beginPath();
+    X.ellipse(center[0],center[1],s*2.1,s*0.78,rotY*0.35,0,Math.PI*2);
+    X.stroke();
+
+    X.strokeStyle='rgba(39,174,96,.12)';
+    X.beginPath();
+    X.ellipse(center[0],center[1],s*1.55,s*0.58,-rotY*0.45,0,Math.PI*2);
+    X.stroke();
+  }
+
+  function fillRoundedRect(left, top, width, height, radius){
+    const safeRadius=Math.max(0, Math.min(radius, width/2, height/2));
+    X.beginPath();
+    X.moveTo(left+safeRadius, top);
+    X.lineTo(left+width-safeRadius, top);
+    X.quadraticCurveTo(left+width, top, left+width, top+safeRadius);
+    X.lineTo(left+width, top+height-safeRadius);
+    X.quadraticCurveTo(left+width, top+height, left+width-safeRadius, top+height);
+    X.lineTo(left+safeRadius, top+height);
+    X.quadraticCurveTo(left, top+height, left, top+height-safeRadius);
+    X.lineTo(left, top+safeRadius);
+    X.quadraticCurveTo(left, top, left+safeRadius, top);
+    X.closePath();
+    X.fill();
+  }
+
+  function drawFloorGrid(){
+    X.strokeStyle='rgba(189,195,199,.28)';
+    X.lineWidth=1;
+    for(let i=-2;i<=2;i++){
+      const a=axisPoint(i/2,-1,-1), b=axisPoint(i/2,-1,1);
+      X.beginPath(); X.moveTo(a[0],a[1]); X.lineTo(b[0],b[1]); X.stroke();
+      const c=axisPoint(-1,-1,i/2), d=axisPoint(1,-1,i/2);
+      X.beginPath(); X.moveTo(c[0],c[1]); X.lineTo(d[0],d[1]); X.stroke();
+    }
+  }
+
+  function resetView(){
+    rotY=-0.7;
+    rotX=0.45;
+    autoSpin=0;
+    setZoom(1, false);
+  }
+
+  function setZoom(nextZoom, shouldRedraw=true){
+    zoom=Math.max(0.8, Math.min(1.8, nextZoom));
+    zoomInput.value=Math.round(zoom*100);
+    zoomValue.textContent=`${zoom.toFixed(2)}x`;
+    if(shouldRedraw){
+      draw();
+      updateSide();
+    }
+  }
 
   function draw(){
     X.clearRect(0,0,W,H);
-    // Light grid
-    X.strokeStyle='#ecf0f1'; X.lineWidth=1;
-    for(let i=0;i<=4;i++){
-      const x=pad.l+cw*i/4, y=pad.t+ch*i/4;
-      X.beginPath(); X.moveTo(x,pad.t); X.lineTo(x,pad.t+ch); X.stroke();
-      X.beginPath(); X.moveTo(pad.l,y); X.lineTo(pad.l+cw,y); X.stroke();
-    }
-    // Axes through origin
-    const [ox,oy]=toC([0,0]);
-    X.strokeStyle='#bdc3c7'; X.lineWidth=1.5;
-    X.beginPath(); X.moveTo(pad.l,oy); X.lineTo(pad.l+cw,oy); X.stroke();
-    X.beginPath(); X.moveTo(ox,pad.t); X.lineTo(ox,pad.t+ch); X.stroke();
-    X.fillStyle='#95a5a6'; X.font='11px sans-serif';
-    X.textAlign='center'; X.fillText('dim 1',pad.l+cw/2,H-6);
-    X.save(); X.translate(10,pad.t+ch/2); X.rotate(-Math.PI/2);
-    X.fillText('dim 2',0,0); X.restore();
+    X.fillStyle='rgba(248,251,253,.8)';
+    X.fillRect(pad.l,pad.t,cw,ch);
+    drawSceneAura();
+    drawFloorGrid();
+
+    const origin=axisPoint(0,0,0);
+    drawAxis('dim 1', origin, axisPoint(axisLen,0,0), '#3498db');
+    drawAxis('dim 2', origin, axisPoint(0,axisLen,0), '#e67e22');
+    drawAxis('dim 3', origin, axisPoint(0,0,axisLen), '#27ae60');
 
     // Vectors from origin (light lines)
-    data.forEach((d,i)=>{
-      const [px,py]=toC(d.v);
-      X.beginPath(); X.moveTo(ox,oy); X.lineTo(px,py);
-      X.strokeStyle=(i===hovered||selected.includes(i))?d.col:'rgba(189,195,199,.4)';
-      X.lineWidth=(i===hovered||selected.includes(i))?2:1;
+    const points=data.map((d,i)=>({ index:i, item:d, p:toC(d.v) })).sort((a,b)=>a.p.z-b.p.z);
+    projectCache.length=0;
+    points.forEach(({index,item,p})=>{
+      projectCache[index]=p;
+      X.beginPath(); X.moveTo(origin[0],origin[1]); X.lineTo(p.x,p.y);
+      X.strokeStyle=(index===hovered||selected.includes(index))?item.col:'rgba(189,195,199,.4)';
+      X.lineWidth=(index===hovered||selected.includes(index))?2:1;
       X.stroke();
     });
 
     // Dashed line between two selected
     if(selected.length===2){
-      const [ax,ay]=toC(data[selected[0]].v);
-      const [bx,by]=toC(data[selected[1]].v);
+      const pa=projectCache[selected[0]] || toC(data[selected[0]].v);
+      const pb=projectCache[selected[1]] || toC(data[selected[1]].v);
       X.setLineDash([5,5]); X.strokeStyle='#2c3e50'; X.lineWidth=1.5;
-      X.beginPath(); X.moveTo(ax,ay); X.lineTo(bx,by); X.stroke();
+      X.beginPath(); X.moveTo(pa.x,pa.y); X.lineTo(pb.x,pb.y); X.stroke();
       X.setLineDash([]);
-      // angle arc at origin
-      const a1=Math.atan2(data[selected[0]].v[1], data[selected[0]].v[0]);
-      const a2=Math.atan2(data[selected[1]].v[1], data[selected[1]].v[0]);
-      X.beginPath(); X.arc(ox,oy,30, -a1, -a2, a1>a2);
-      X.strokeStyle='rgba(44,62,80,.5)'; X.lineWidth=1.5; X.stroke();
       X.fillStyle='#2c3e50'; X.font='bold 11px sans-serif'; X.textAlign='center';
-      const mid=(a1+a2)/2;
-      X.fillText('θ', ox+40*Math.cos(-mid), oy+40*Math.sin(-mid));
+      X.fillText('similarity', (pa.x+pb.x)/2, (pa.y+pb.y)/2-10);
     }
 
     // Points + labels
-    data.forEach((d,i)=>{
-      const [px,py]=toC(d.v);
-      const active=i===hovered||selected.includes(i);
-      const r=active?8:6;
-      X.beginPath(); X.arc(px,py,r,0,7);
-      X.fillStyle=d.col; X.globalAlpha=active?1:.75; X.fill(); X.globalAlpha=1;
+    const labelBoxes=[];
+    points.forEach(({index,item,p})=>{
+      const active=index===hovered||selected.includes(index);
+      const r=(active?12.5:10)*p.depth*Math.pow(zoom,0.35);
+      X.shadowColor=item.col;
+      X.shadowBlur=active?18:10;
+      X.beginPath(); X.arc(p.x,p.y,r,0,7);
+      X.fillStyle=item.col; X.globalAlpha=active?1:Math.max(0.45,0.78*p.depth); X.fill(); X.globalAlpha=1;
+      X.shadowBlur=0;
       X.strokeStyle='#fff'; X.lineWidth=2; X.stroke();
-      // label
-      X.fillStyle=active?'#2c3e50':'#555'; X.font=active?'bold 13px sans-serif':'12px sans-serif';
-      X.textAlign='center'; X.textBaseline='bottom';
-      X.fillText(d.w, px, py-r-3);
+
+      const labelFont=active ? 16 : 15;
+      X.font=`${active?'bold ':' '}${labelFont}px sans-serif`;
+      const textWidth=X.measureText(item.w).width;
+      const labelX=p.x;
+      const labelY=p.y-r-8;
+      const box={
+        left:labelX-textWidth/2-6,
+        right:labelX+textWidth/2+6,
+        top:labelY-labelFont-4,
+        bottom:labelY+4
+      };
+      const crowded=labelBoxes.some(other => !(box.right < other.left || box.left > other.right || box.bottom < other.top || box.top > other.bottom));
+      const shouldDrawLabel=active || (!crowded && p.depth > 0.72);
+      if(shouldDrawLabel){
+        labelBoxes.push(box);
+        X.fillStyle=active?'rgba(255,255,255,.92)':'rgba(255,255,255,.78)';
+        fillRoundedRect(box.left, box.top, box.right-box.left, box.bottom-box.top, 8);
+        X.fillStyle=active?'#1f3442':'#455a67';
+        X.textAlign='center';
+        X.textBaseline='bottom';
+        X.fillText(item.w, labelX, labelY);
+      }
     });
+
+    X.fillStyle='#6c8290';
+    X.font='12px sans-serif';
+    X.textAlign='left';
+    X.fillText('Drag to rotate the embedding space', pad.l, H-10);
   }
 
   /* ── Side panel: bar chart of distances + math ── */
@@ -1146,7 +1796,7 @@ function drawChart(canvas, data, label, colour, yLabel){
         const y=barPad.t+j*barH;
         const w=Math.max(0,(s.s+1)/2)*(bw-barPad.l-barPad.r);
         BX.fillStyle=s.i===selected[1]?'#e74c3c':(s.i===selected[0]?'rgba(44,62,80,.3)':s.col);
-        BX.globalAlpha=s.i===selected[0]?.3:.7; 
+        BX.globalAlpha=s.i===selected[0] ? 0.3 : 0.7;
         BX.fillRect(barPad.l,y+2,w,barH-4);
         BX.globalAlpha=1;
         // label
@@ -1161,9 +1811,9 @@ function drawChart(canvas, data, label, colour, yLabel){
       mathDiv.innerHTML=`
         <b style="color:var(--primary)">Selected:</b> "${ref.w}" → "${target.w}"<br>
         <b>Vectors:</b><br>
-        &nbsp; ${ref.w} = [${ref.v[0].toFixed(2)}, ${ref.v[1].toFixed(2)}]<br>
-        &nbsp; ${target.w} = [${target.v[0].toFixed(2)}, ${target.v[1].toFixed(2)}]<br>
-        <b>Dot product:</b> ${(ref.v[0]*target.v[0]+ref.v[1]*target.v[1]).toFixed(3)}<br>
+        &nbsp; ${ref.w} = [${ref.v[0].toFixed(2)}, ${ref.v[1].toFixed(2)}, ${ref.v[2].toFixed(2)}]<br>
+        &nbsp; ${target.w} = [${target.v[0].toFixed(2)}, ${target.v[1].toFixed(2)}, ${target.v[2].toFixed(2)}]<br>
+        <b>Dot product:</b> ${ref.v.reduce((sum,val,i)=>sum+val*target.v[i],0).toFixed(3)}<br>
         <b>Cosine sim:</b> <span style="color:#e74c3c;font-weight:700">${sim.toFixed(3)}</span><br>
         <b>Euclidean dist:</b> ${dist.toFixed(3)}
       `;
@@ -1180,7 +1830,7 @@ function drawChart(canvas, data, label, colour, yLabel){
         const y=barPad.t+j*barH;
         const w=Math.max(0,(s.s+1)/2)*(bw-barPad.l-barPad.r);
         BX.fillStyle=s.i===hovered?'rgba(44,62,80,.3)':s.col;
-        BX.globalAlpha=s.i===hovered?.3:.7;
+        BX.globalAlpha=s.i===hovered ? 0.3 : 0.7;
         BX.fillRect(barPad.l,y+2,w,barH-4);
         BX.globalAlpha=1;
         BX.fillStyle='#2c3e50'; BX.font='11px sans-serif'; BX.textAlign='right';
@@ -1189,47 +1839,98 @@ function drawChart(canvas, data, label, colour, yLabel){
         BX.fillText(s.s.toFixed(2), barPad.l+w+4, y+barH/2+4);
       });
       mathDiv.innerHTML=`
-        <b style="color:var(--primary)">"${h.w}"</b> = [${h.v[0].toFixed(2)}, ${h.v[1].toFixed(2)}]<br>
+        <b style="color:var(--primary)">"${h.w}"</b> = [${h.v[0].toFixed(2)}, ${h.v[1].toFixed(2)}, ${h.v[2].toFixed(2)}]<br>
         Click two words to compare them.
       `;
     } else {
       BX.fillStyle='#bdc3c7'; BX.font='12px sans-serif'; BX.textAlign='center';
       BX.fillText('Hover a word to see', bw/2, bh/2-8);
       BX.fillText('similarity rankings', bw/2, bh/2+10);
-      mathDiv.innerHTML='Hover over a word to see distances.<br>Click two words to compare vectors.';
+      mathDiv.innerHTML='Hover or tap a word to see distances.<br>Select two words to compare vectors.';
     }
   }
 
-  /* ── Mouse interaction ── */
+  /* ── Pointer interaction ── */
   function hitTest(mx,my){
     for(let i=0;i<data.length;i++){
-      const [px,py]=toC(data[i].v);
-      if((mx-px)**2+(my-py)**2<15*15) return i;
+      const p=projectCache[i] || toC(data[i].v);
+      const radius=18*(p.depth||1)*Math.pow(zoom,0.25);
+      if((mx-p.x)**2+(my-p.y)**2<radius*radius) return i;
     }
     return -1;
   }
 
-  C.addEventListener('mousemove',e=>{
-    const [mx,my]=canvasXY(C,e);
+  function updateHoverFromPoint(mx,my){
     const h=hitTest(mx,my);
     if(h!==hovered){ hovered=h; draw(); updateSide(); }
-  });
-  C.addEventListener('mouseleave',()=>{ hovered=-1; draw(); updateSide(); });
-  C.addEventListener('click',e=>{
-    const [mx,my]=canvasXY(C,e);
-    const h=hitTest(mx,my);
-    if(h<0) return;
-    if(selected.includes(h)){
-      selected=selected.filter(s=>s!==h);
+    return h;
+  }
+
+  function toggleSelectedWord(index){
+    if(index<0) return;
+    if(selected.includes(index)){
+      selected=selected.filter(s=>s!==index);
     } else {
-      selected.push(h);
+      selected.push(index);
       if(selected.length>2) selected.shift();
     }
     draw(); updateSide();
-  });
+  }
 
+  C.addEventListener('pointermove',e=>{
+    const [mx,my]=canvasXY(C,e);
+    if(dragging && e.pointerId===pointerId && lastPointer){
+      const dx=mx-lastPointer[0], dy=my-lastPointer[1];
+      if(Math.abs(dx)+Math.abs(dy)>1){
+        rotY+=dx*0.01;
+        rotX=Math.max(-1.2, Math.min(1.2, rotX+dy*0.01));
+        dragMoved=true;
+        autoSpin=0;
+        draw();
+      }
+      lastPointer=[mx,my];
+      return;
+    }
+    if(e.pointerType==='touch') return;
+    updateHoverFromPoint(mx,my);
+  });
+  C.addEventListener('pointerleave',()=>{ hovered=-1; draw(); updateSide(); });
+  C.addEventListener('pointerdown',e=>{
+    const [mx,my]=canvasXY(C,e);
+    dragging=true;
+    dragMoved=false;
+    pointerId=e.pointerId;
+    lastPointer=[mx,my];
+    C.setPointerCapture(e.pointerId);
+    updateHoverFromPoint(mx,my);
+  });
+  C.addEventListener('pointerup',e=>{
+    const [mx,my]=canvasXY(C,e);
+    if(dragging && !dragMoved){
+      const h=updateHoverFromPoint(mx,my);
+      toggleSelectedWord(h);
+    }
+    dragging=false;
+    pointerId=null;
+    lastPointer=null;
+    if(C.hasPointerCapture(e.pointerId)) C.releasePointerCapture(e.pointerId);
+  });
+  C.addEventListener('pointercancel',e=>{
+    dragging=false;
+    pointerId=null;
+    lastPointer=null;
+    if(C.hasPointerCapture(e.pointerId)) C.releasePointerCapture(e.pointerId);
+  });
+  C.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const factor=e.deltaY<0 ? 1.08 : 0.92;
+    setZoom(zoom*factor);
+  }, { passive:false });
+
+  zoomInput.oninput=function(){ setZoom(parseInt(this.value,10)/100); };
   document.getElementById('embSet').onchange=function(){ load(parseInt(this.value)); };
   window.embReset=function(){ load(parseInt(document.getElementById('embSet').value)); };
+  window.embResetView=function(){ resetView(); draw(); updateSide(); };
 
   // Auto-load first dataset
   load(0);
@@ -1285,7 +1986,7 @@ function drawChart(canvas, data, label, colour, yLabel){
     'bird':{eats:.2,runs:.2,sleeps:.15,sat:.2,on:.1,the:.05},
     'sat': {on:.55,the:.1,a:.1,happy:.05,sad:.05},
     'on':  {the:.4,a:.35,mat:.1,big:.03,small:.03},
-    'runs':{fast:.3,on:.15,the:.1,a:.1,slow:.1,to:.05},
+    'runs':{fast:.3,on:.15,the:.1,a:.1,slow:.1},
     'eats':{the:.25,a:.25,fish:.15,fast:.05,slow:.05},
     'sleeps':{on:.3,the:.15,a:.15,happy:.05,sad:.05},
     'big':  {cat:.25,dog:.25,fish:.15,bird:.15,mat:.1},
@@ -1313,7 +2014,7 @@ function drawChart(canvas, data, label, colour, yLabel){
 
   function renderPrompt(){
     const pd=document.getElementById('tfPrompt');
-    if(prompt.length===0){ pd.innerHTML='<span style="color:#bdc3c7">your prompt appears here…</span>'; return; }
+    if(prompt.length===0){ pd.innerHTML='<span class="placeholder">your prompt appears here…</span>'; return; }
     pd.innerHTML=prompt.map(w=>'<span class="chip">'+w+'</span>').join('');
     lastResult=null;
     document.getElementById('tfPipe').style.display='none';
@@ -1508,6 +2209,7 @@ function drawChart(canvas, data, label, colour, yLabel){
   const W=C.width, H=C.height;
   const XOR=[[0,0,0],[0,1,1],[1,0,1],[1,1,0]];
   let wh,bh,wo,bo,epoch,running,raf,lossHist;
+  let shouldResumeWhenVisible=true;
   function randW(){return(Math.random()-0.5)*2;}
   function sigmoid(x){return 1/(1+Math.exp(-x));}
 
@@ -1613,10 +2315,27 @@ function drawChart(canvas, data, label, colour, yLabel){
   }
 
   document.getElementById('nnLR').oninput=function(){document.getElementById('nnLRv').textContent=(this.value/100).toFixed(2);};
-  document.getElementById('nnGo').onclick=function(){running=!running;this.textContent=running?'⏸ Pause':'▶ Resume';if(running)tick();};
-  window.nnReset=function(){running=false;if(raf)cancelAnimationFrame(raf);init();draw();
-    document.getElementById('nnGo').textContent='⏸ Pause';running=true;tick();};
-  init();draw();running=true;tick();
+  document.getElementById('nnGo').onclick=function(){running=!running;shouldResumeWhenVisible=running;this.textContent=running?'⏸ Pause':'▶ Resume';if(running)tick();};
+  function pauseForHide(){
+    if(raf) cancelAnimationFrame(raf);
+    raf=null;
+    if(running){
+      running=false;
+      if(shouldResumeWhenVisible) document.getElementById('nnGo').textContent='▶ Resume';
+    }
+  }
+  function resumeForShow(){
+    if(!shouldResumeWhenVisible || running) return;
+    running=true;
+    document.getElementById('nnGo').textContent='⏸ Pause';
+    tick();
+  }
+  window.nnReset=function(){running=false;if(raf)cancelAnimationFrame(raf);raf=null;init();draw();
+    shouldResumeWhenVisible=true;
+    document.getElementById('nnGo').textContent=isDemoVisible(5)?'⏸ Pause':'▶ Resume';
+    if(isDemoVisible(5)){running=true;tick();}};
+  init();draw();
+  registerDemoController(5, { onShow: resumeForShow, onHide: pauseForHide });
 })();
 
 /* ═══════════════════════════════════════════════════
@@ -1983,6 +2702,7 @@ function drawChart(canvas, data, label, colour, yLabel){
   const ARROWS=['→','←','↓','↑'];
   const alpha=0.2, gamma=0.9;
   let Q,agentR,agentC,episode,stepCount,running,raf,rewardHist;
+  let shouldResumeWhenVisible=true;
 
   function isWall(r,c){return WALLS.some(w=>w.r===r&&w.c===c);}
 
@@ -2058,10 +2778,27 @@ function drawChart(canvas, data, label, colour, yLabel){
     raf=requestAnimationFrame(()=>setTimeout(tick,30));
   }
 
-  document.getElementById('rlGo').onclick=function(){running=!running;this.textContent=running?'⏸ Pause':'▶ Resume';if(running)tick();};
-  window.rlReset=function(){running=false;if(raf)cancelAnimationFrame(raf);init();draw();
-    document.getElementById('rlGo').textContent='⏸ Pause';running=true;tick();};
-  init();draw();running=true;tick();
+  document.getElementById('rlGo').onclick=function(){running=!running;shouldResumeWhenVisible=running;this.textContent=running?'⏸ Pause':'▶ Resume';if(running)tick();};
+  function pauseForHide(){
+    if(raf) cancelAnimationFrame(raf);
+    raf=null;
+    if(running){
+      running=false;
+      if(shouldResumeWhenVisible) document.getElementById('rlGo').textContent='▶ Resume';
+    }
+  }
+  function resumeForShow(){
+    if(!shouldResumeWhenVisible || running) return;
+    running=true;
+    document.getElementById('rlGo').textContent='⏸ Pause';
+    tick();
+  }
+  window.rlReset=function(){running=false;if(raf)cancelAnimationFrame(raf);raf=null;init();draw();
+    shouldResumeWhenVisible=true;
+    document.getElementById('rlGo').textContent=isDemoVisible(9)?'⏸ Pause':'▶ Resume';
+    if(isDemoVisible(9)){running=true;tick();}};
+  init();draw();
+  registerDemoController(9, { onShow: resumeForShow, onHide: pauseForHide });
 })();
 
 /* ═══════════════════════════════════════════════════
@@ -2212,6 +2949,7 @@ function drawChart(canvas, data, label, colour, yLabel){
   const C=document.getElementById('bp'), X=C.getContext('2d');
   const W=C.width, H=C.height;
   let w1,w2,b1,b2,epoch,lossHist,running,raf,lastFwd;
+  let shouldResumeWhenVisible=false;
   const lr=0.3;
   // Simple 2→2→1 network learning AND-ish pattern
   const DATA=[[0,0,0],[0,1,0],[1,0,0],[1,1,1]];
@@ -2345,9 +3083,26 @@ h₂ = σ(${w1[1][0].toFixed(2)}·x₁ + ${w1[1][1].toFixed(2)}·x₂ + ${b1[1].
   document.getElementById('bpStep').onclick=doStep;
   document.getElementById('bpAuto').onclick=function(){
     running=!running;
+    shouldResumeWhenVisible=running;
     this.textContent=running?'⏸ Stop':'⏩ Auto-Train';
     if(running) autoTick();
   };
+
+  function pauseForHide(){
+    if(raf) cancelAnimationFrame(raf);
+    raf=null;
+    if(running){
+      running=false;
+      if(shouldResumeWhenVisible) document.getElementById('bpAuto').textContent='⏩ Auto-Train';
+    }
+  }
+
+  function resumeForShow(){
+    if(!shouldResumeWhenVisible || running) return;
+    running=true;
+    document.getElementById('bpAuto').textContent='⏸ Stop';
+    autoTick();
+  }
 
   function autoTick(){
     if(!running)return;
@@ -2361,11 +3116,14 @@ h₂ = σ(${w1[1][0].toFixed(2)}·x₁ + ${w1[1][1].toFixed(2)}·x₂ + ${b1[1].
 
   window.bpReset=function(){
     running=false;if(raf)cancelAnimationFrame(raf);
+    raf=null;
+    shouldResumeWhenVisible=false;
     document.getElementById('bpAuto').textContent='⏩ Auto-Train';
     init();draw();updateMath();
     document.getElementById('bpInfo').textContent='Press ▶ to run one forward+backward pass.';
   };
   init();draw();updateMath();
+  registerDemoController(11, { onShow: resumeForShow, onHide: pauseForHide });
 })();
 </script>
 </body>
